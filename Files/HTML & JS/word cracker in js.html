@@ -1,0 +1,96 @@
+﻿<button onclick="crackWord()"> Click </button>
+<br />
+<h1>
+    start time :  <label id="startTime">  </label>
+</h1>
+<!--<h1>
+    word :  <label id="wordComb">  </label>
+</h1>-->
+<h1>
+    word found :  <label id="wordFound">  </label>
+</h1>
+<h1>
+    <label id="executionTime">  </label>
+</h1>
+
+<script>
+    //function myFunction() {
+    //    // Code to measure execution time
+    //    for (let i = 0; i < 7000000; i++) {
+    //        // Some time-consuming operation
+    //    }
+    //}
+
+    //const start = performance.now();
+    //myFunction();
+    //const end = performance.now();
+    //const executionTime = end - start;
+    //console.log(`myFunction execution time: ${executionTime} milliseconds`);
+
+
+    function generateCombinationsWithRepeats(input, n) {
+        const combinations = [];
+
+        function generate(currentCombination) {
+            if (currentCombination.length === n) {
+                combinations.push(currentCombination);
+                return;
+            }
+
+            for (const letter of input) {
+                generate(currentCombination + letter);
+            }
+        }
+
+        generate('');
+
+        return combinations;
+    }
+
+    const inputArray = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+    const n = 2; // Change n to the desired combination length
+
+    //const combinations = generateCombinationsWithRepeats(inputArray, n);
+
+    //console.log(combinations);
+
+    function crackWord() {
+        const start = performance.now();
+        document.getElementById("startTime").innerHTML = start
+        console.log(start)
+
+        let word = "aa"  //word to crack
+
+        //let word = document.getElementById("txtWord").value
+
+        counter = 1
+        flag = true
+        while (flag) {
+            const combinations = generateCombinationsWithRepeats(inputArray, counter)
+            for (var i = 0; i < combinations.length; i++) {
+                if (combinations[i] == word) {
+                    console.log(combinations[i])
+                    const end = performance.now();
+                    const executionTime = end - start;
+                    console.log(`Script execution time: ${executionTime} milliseconds`);
+                    document.getElementById("executionTime").innerHTML = `Script execution time: ${executionTime} milliseconds`
+                    document.getElementById("wordFound").innerHTML = combinations[i]
+                    break
+                }
+                //else {
+                //    /*document.getElementById("wordComb").innerHTML = combinations[i]*/
+                //    console.log(combinations[i])
+                //}
+            }
+            if (counter === 4) {
+                break
+            }
+
+            counter++
+        }
+
+        //const combinations = generateCombinationsWithRepeats(inputArray, 2)
+        //console.log(combinations)
+    }
+
+</script>

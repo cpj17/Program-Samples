@@ -1,0 +1,30 @@
+﻿<script>
+    function generateCombinationsWithRepeats(input, n) {
+        const combinations = [];
+
+        function generate(currentCombination) {
+            //console.log(currentCombination)
+            if (currentCombination.length === n) {
+                combinations.push(currentCombination);
+                return;
+            }
+
+            for (const letter of input) {
+                //console.log(currentCombination + letter)
+                generate(currentCombination + letter);
+            }
+        }
+
+        generate('');
+
+        return combinations;
+    }
+
+    const inputArray = ["a", "b", "c"];
+    const n = 2; // Change n to the desired combination length
+    const combinations = generateCombinationsWithRepeats(inputArray, n);
+
+    console.log(combinations);
+
+
+</script>

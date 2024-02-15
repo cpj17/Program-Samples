@@ -1,0 +1,47 @@
+<?php
+	$n = 5;
+	$a = "FLAMES";
+	while(strlen($a) != 1) {
+		$a = Reduce($a, $n);
+	}
+	switch($a)
+	{
+		case "F":
+			echo "FRIENDS";
+			break;
+		case "L":
+			echo "LOVE";
+			break;
+		case "A":
+			echo "AFFECTION";
+			break;
+		case "M":
+			echo "MARRIAGE";
+			break;
+		case "E":
+			echo "ENEMY";
+			break;
+		case "S":
+			echo "SIBLINGS";
+			break;
+	}
+	
+	
+	function Reduce($a, $n) {
+		$k = 0;
+		for($i=1;$i<=$n;$i++) {
+			if($k == strlen($a)) {
+				$k= 0;
+			}
+			if($i == $n) {
+				$res = str_replace($a[$k], "", $a);
+				$res = Restructure($res, $k);
+			}
+			$k++;
+		}
+		return $res;
+	}
+	function Restructure($a, $n) {
+		return substr($a, $n, strlen($a)) . substr($a, 0, $n);
+	}
+?>

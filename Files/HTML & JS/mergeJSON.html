@@ -1,0 +1,20 @@
+<script>
+    const obj1 = [
+  { id: 1, name: 'John', age: 30 },
+  { id: 2, name: 'Jane', age: 25 },
+  { id: 3, name: 'Mark', age: 35 }
+];
+
+const obj2 = [
+  { id: 1, gender: 'Male', city: 'New York' },
+  { id: 2, gender: 'Female', city: 'Los Angeles' }
+];
+
+const mergedObj = obj1.map(item1 => {
+  const item2 = obj2.find(item2 => item2.id === item1.id);
+  return { ...item1, ...item2 };
+});
+
+console.log(mergedObj);
+
+</script>

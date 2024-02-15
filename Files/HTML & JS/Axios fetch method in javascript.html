@@ -1,0 +1,11 @@
+﻿ <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<input type="text" id="txt" value="13">
+<button onclick="test()"> OK </button>
+
+<script>
+  axios.get("https://jsonplaceholder.typicode.com/posts")
+	   .then(res => {
+			console.log(res.data)
+	   })
+</script>

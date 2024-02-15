@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signature Pad</title>
+    <!-- Include SignaturePad library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
+    <style>
+        /* Set a max-width for the container */
+        #canvasContainer {
+            /* max-width: 600px; */
+            width: 100%;
+            height: 400px;
+        }
+
+        /* Set canvas width to 100% of the container */
+        #signatureCanvas {
+            width: 100%;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Signature Pad</h1>
+
+<div id="canvasContainer">
+    <canvas id="signatureCanvas"></canvas>
+</div>
+
+<button onclick="clearSignature()">Clear Signature</button>
+<button onclick="saveSignature()">Save Signature</button>
+
+<script>
+    // Get the canvas element and its container
+    var canvas = document.getElementById('signatureCanvas');
+    var canvasContainer = document.getElementById('canvasContainer');
+    var ctx = canvas.getContext('2d');
+
+    // Set canvas dimensions to match the container size
+    canvas.width = canvasContainer.clientWidth;
+    canvas.height = canvasContainer.clientHeight;
+
+    // Create a SignaturePad instance
+    var signaturePad = new SignaturePad(canvas);
+
+    // Function to clear the signature
+    function clearSignature() {
+        signaturePad.clear();
+    }
+
+    // Function to save the signature as an image (base64 data)
+    function saveSignature() {
+        if (signaturePad.isEmpty()) {
+            alert("Please provide a signature first.");
+        } else {
+            var dataURL = signaturePad.toDataURL();
+            // You can now send 'dataURL' to the server or use it as needed
+            console.log(dataURL);
+            alert("Signature saved!");
+        }
+    }
+</script>
+
+</body>
+</html>

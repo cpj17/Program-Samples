@@ -1,0 +1,108 @@
+<!--Bootbox-->
+
+<!--Add below file in html file-->
+
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include Bootstrap -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!-- Include Bootbox.js -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.css" rel="stylesheet"> <!-- this file optional -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
+
+
+<!--Sample Bootbox dialog-->
+<script>
+    $(document).ready(function () {
+        //alert
+        bootbox.alert("Hello, world!");
+
+        //confirm
+        bootbox.confirm("Are you sure?", function (result) {
+            if (result) {
+                // The user clicked "OK"
+            } else {
+                // The user clicked "Cancel"
+            }
+        });
+
+        //prompt
+        bootbox.prompt("What is your name?", function (result) {
+            if (result !== null) {
+                // The user clicked "OK" and entered a value
+                console.log("Your name is " + result);
+            } else {
+                // The user clicked "Cancel" or didn't enter a value
+            }
+        });
+
+        //And here's an example of how to use Bootbox.js to display a custom dialog:
+        bootbox.dialog({
+            title: "Custom dialog",
+            message: "This is a custom dialog with any content you want.",
+            buttons: {
+                cancel: {
+                    label: "Cancel",
+                    className: "btn-default",
+                    callback: function () {
+                        // The user clicked "Cancel"
+                    }
+                },
+                ok: {
+                    label: "OK",
+                    className: "btn-primary",
+                    callback: function () {
+                        // The user clicked "OK"
+                    }
+                }
+            }
+        });
+
+        //You can increase the width of the Bootbox dialog box by setting the size property to "large" or "extra-large" when you create the dialog. For example:
+        bootbox.dialog({
+            message: "This is a large dialog box!",
+            size: "large",
+            buttons: {
+                ok: {
+                    label: "OK",
+                    className: "btn-primary"
+                }
+            }
+        });
+
+        //If you need even more control over the width, you can set a custom CSS width for the dialog box by adding a css object to the options. For example:
+        bootbox.dialog({
+            message: "This is a custom width dialog box!",
+            css: {
+                width: "800px"
+            },
+            buttons: {
+                ok: {
+                    label: "OK",
+                    className: "btn-primary"
+                }
+            }
+        });
+
+        //To increase the width of a Bootbox alert dialog, you can set a custom CSS width for the dialog box by adding a className property to the options and setting a new CSS class with the desired width. Here's an example:
+        bootbox.alert({
+            message: "This is an alert with a custom width!",
+            className: 'my-alert-class',  //Refer below style code A.
+            backdrop: true
+        });
+
+    });
+
+</script>
+
+<style>
+    /*A style (begins)*/
+    .my-alert-class .modal-dialog {
+        width: max-content;
+        font-size: 20px;
+    }
+    /*A style (ends)*/
+</style>

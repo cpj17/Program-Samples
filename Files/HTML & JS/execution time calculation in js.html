@@ -1,0 +1,16 @@
+﻿<script>
+    function myFunction() {
+  // Code to measure execution time
+  for (let i = 0; i < 1000000; i++) {
+    // Some time-consuming operation
+  }
+}
+
+const start = performance.now();
+myFunction();
+const end = performance.now();
+const executionTime = end - start;
+console.log(`myFunction execution time: ${executionTime} milliseconds`);
+
+
+</script>

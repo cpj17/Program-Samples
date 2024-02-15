@@ -1,0 +1,13 @@
+<script>
+    function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function myFunction() {
+  console.log('start');
+  await sleep(2000);
+  console.log('end');
+}
+
+myFunction(); // logs 'start', waits for 2 seconds, logs 'end'
+</script>

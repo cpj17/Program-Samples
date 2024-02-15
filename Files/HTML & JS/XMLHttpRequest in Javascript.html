@@ -1,0 +1,23 @@
+﻿<script type="text/javascript">
+      function fetchData() {
+    var xhr = new XMLHttpRequest();
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                var json = JSON.parse(xhr.responseText);
+                document.write(JSON.stringify(json));
+            } else {
+                console.error('Error fetching data. Status code:', xhr.status);
+            }
+        }
+    };
+
+    xhr.open('GET', 'https://jsonplaceholder.typicode.com/todos/1', true);
+    xhr.send();
+}
+
+// Call the function
+fetchData();
+
+</script>

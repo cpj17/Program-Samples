@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map for Locations</title>
+    <style>
+        .map-container {
+            height: 400px;
+            width: 1200px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map-container-1" class="map-container"></div>
+    <div id="map-container-2" class="map-container"></div>
+
+    <script>
+        async function fetchLocationDetails() {
+            try {
+                const apiKey = 'AIzaSyAiutET2iYakntAgI_4GlFpRBeLa79KYB8';
+                const locations = [
+                    { lat: 1.35321909, lng: 103.85696032 },
+                    { lat: 1.3415893, lng: 103.9429807 }
+                ];
+
+                for (let i = 0; i < locations.length; i++) {
+                    const location = locations[i];
+                    const mapContainer = document.getElementById(`map-container-${i + 1}`);
+                    const map = new google.maps.Map(mapContainer, {
+                        center: { lat: location.lat, lng: location.lng },
+                        zoom: 14
+                    });
+
+                    const marker = new google.maps.Marker({
+                        position: { lat: location.lat, lng: location.lng },
+                        map: map
+                    });
+
+                    const infowindow = new google.maps.InfoWindow({
+                        content: `<div>Latitude: ${location.lat}</div><div>Longitude: ${location.lng}</div>`
+                    });
+
+                    marker.addListener('click', function () {
+                        infowindow.open(map, marker);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading Google Maps:', error);
+            }
+        }
+
+        // Load Google Maps asynchronously
+        function initMap() {
+            fetchLocationDetails();
+        }
+    </script>
+
+    <!-- Load Google Maps JavaScript API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiutET2iYakntAgI_4GlFpRBeLa79KYB8&callback=initMap" async defer></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+﻿<script>
+    // Specify the target timezone (e.g., 'UTC', 'America/New_York', 'Europe/London')    const targetTimezone = 'UTC';    // Create an Intl.DateTimeFormat object with the specified timezone    const formatter = new Intl.DateTimeFormat('en-US', {        imeZone: targetTimezone,
+        hour12: false, // Use 24-hour format
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',        timeZoneName: 'short'    });    // Get the formatted date and time in the target timezone    //const formattedTime = formatter.format(new Date());    const formattedTime = formatter.format(new Date("2023-12-06T21:22:00"));    console.log(`Current time in ${targetTimezone}: ${formattedTime}`);
+
+
+</script>

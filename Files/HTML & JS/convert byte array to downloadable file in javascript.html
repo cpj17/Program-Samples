@@ -1,0 +1,27 @@
+<button onclick="btnClicked()"> Download </button>
+
+<script>
+	//btnClicked()
+	function btnClicked() {
+		var byteArrayAsString = "VGhpcyB0ZXh0IGZpbGUgY3JlYXRlZCBmb3IgdGVzdGluZyAiY29udmVydCBieXRlIGFycmF5IHRvIGRvd25sb2FkYWJsZSBmaWxlIGluIGphdmFzY3JpcHQiDQpjcmVhdGVkIGJ5IC0gQ1BKDQpjcmVhdGVkIG9uIC0gMDE6MTQgUE0gMjctMDQtMjAyMw=="
+		
+		const base64String = byteArrayAsString
+            if (base64String.length > 0) {
+
+                const byteArray = new Uint8Array(atob(base64String).split('').map(char => char.charCodeAt(0)))
+
+                const blob = new Blob([byteArray], { type: 'application/octet-stream' })
+
+                const link = document.createElement('a')
+                link.href = window.URL.createObjectURL(blob)
+                var datetime = new Date()
+                var filename = "Sample Download - " + datetime.toISOString() + ".txt"
+                link.download = filename
+
+                link.click()
+            }
+            else {
+                alert("byte array is empty")
+            }
+	}
+</script>

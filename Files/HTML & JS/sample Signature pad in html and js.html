@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Signature Pad</title>
+    <style>
+        #signature-pad {
+            border: 2px solid #000;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="signature-pad" width="900" height="550"></canvas>
+    <button id="clear-button">Clear</button>
+    <button id="save-button">Save</button>
+
+    <script src="signature.js"></script>
+</body>
+</html>
+
+<script>
+  // Get canvas element and context
+var canvas = document.getElementById('signature-pad');
+var ctx = canvas.getContext('2d');
+
+// Set up variables to track signature state
+var drawing = false;
+var lastX = 0;
+var lastY = 0;
+
+// Function to start drawing
+function startDrawing(e) {
+    drawing = true;
+    lastX = e.clientX - canvas.offsetLeft;
+    lastY = e.clientY - canvas.offsetTop;
+}
+
+// Function to stop drawing
+function stopDrawing() {
+    drawing = false;
+}
+
+// Function to draw on the canvas
+function draw(e) {
+    if (!drawing) return;
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#000'; // Signature color (black)
+    ctx.lineWidth = 2; // Line width
+
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+    ctx.stroke();
+
+    lastX = e.clientX - canvas.offsetLeft;
+    lastY = e.clientY - canvas.offsetTop;
+}
+
+// Event listeners for mouse/touch interactions
+canvas.addEventListener('mousedown', startDrawing);
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouseup', stopDrawing);
+canvas.addEventListener('mouseout', stopDrawing);
+
+// Clear the canvas
+document.getElementById('clear-button').addEventListener('click', function() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+});
+
+// Function to save the signature as a Base64-encoded byte string
+function saveSignatureAsByteString() {
+    var dataURL = canvas.toDataURL("image/png"); // Convert canvas to data URL
+	console.log(dataURL)
+    var base64Signature = dataURL.split(',')[1]; // Extract the Base64 portion
+    console.log(base64Signature);
+	
+	var byteArrayAsString = base64Signature
+		
+		const base64String = byteArrayAsString
+            if (base64String.length > 0) {
+
+                const byteArray = new Uint8Array(atob(base64String).split('').map(char => char.charCodeAt(0)))
+
+                const blob = new Blob([byteArray], { type: 'application/octet-stream' })
+
+                const link = document.createElement('a')
+                link.href = window.URL.createObjectURL(blob)
+                var datetime = new Date()
+                var filename = "Sample Download - " + datetime.toISOString() + ".png"
+                link.download = filename
+
+                link.click()
+            }
+            else {
+                alert("byte array is empty")
+            }
+}
+
+// Save the signature as a Base64-encoded byte string
+document.getElementById('save-button').addEventListener('click', saveSignatureAsByteString);
+
+</script>

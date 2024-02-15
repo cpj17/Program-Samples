@@ -1,0 +1,29 @@
+﻿<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+
+<script>
+  // Your data to be stored
+const sensitiveData = "This is a secret message";
+
+// Your encryption key (make sure it's a strong and secure key)
+const encryptionKey = "YourEncryptionKey";
+
+// Encrypt the data using AES encryption
+const encryptedData = CryptoJS.AES.encrypt(sensitiveData, encryptionKey).toString();
+
+// Store the encrypted data in session storage
+sessionStorage.setItem('encryptedData', encryptedData);
+
+
+// Retrieve the encrypted data from session storage
+const encryptedData = sessionStorage.getItem('encryptedData');
+
+// Decrypt the data using the same encryption key
+const decryptedBytes = CryptoJS.AES.decrypt(encryptedData, encryptionKey);
+
+// Convert the decrypted bytes to a readable string
+const decryptedData = decryptedBytes.toString(CryptoJS.enc.Utf8);
+
+// Now, decryptedData contains the original sensitive data
+console.log("Decrypted Data:", decryptedData);
+
+</script>

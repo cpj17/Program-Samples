@@ -1,0 +1,52 @@
+﻿<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>-->
+
+
+<script>
+    function exportToExcel(jsonData, fileName) {
+        const worksheet = XLSX.utils.json_to_sheet(jsonData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+        // Use XLSX.write to generate Excel data as a binary string
+        const excelData = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
+
+        // Convert the binary string to a Blob
+        const blob = new Blob([s2ab(excelData)], { type: 'application/octet-stream' });
+
+        // Create a download link and trigger the click event
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        //a.style.display = 'none';
+        //document.body.appendChild(a);
+        a.click();
+
+        // Clean up
+        window.URL.revokeObjectURL(url);
+        /*document.body.removeChild(a);*/
+    }
+
+
+    // Helper function to convert a string to an ArrayBuffer
+    function s2ab(s) {
+        const buf = new ArrayBuffer(s.length);
+        const view = new Uint8Array(buf);
+        for (let i = 0; i < s.length; i++) {
+            view[i] = s.charCodeAt(i) & 0xFF;
+        }
+        return buf;
+    }
+
+
+
+    const jsonData = [
+        { Name: "John", Age: 30, City: "New York" },
+        { Name: "Jane", Age: 25, City: "Los Angeles" },
+        // Add more data as needed
+    ];
+
+    exportToExcel(jsonData, "data.xlsx");
+
+</script>

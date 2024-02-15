@@ -1,0 +1,46 @@
+<style>
+   @keyframes changeContent {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+#myButton {
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in-out;
+}
+
+#myButton.animate {
+  animation-name: changeContent;
+}
+
+</style>
+
+<button id="myButton" onclick="changeContent()">Click Me</button>
+
+
+
+<script>
+  function changeContent() {
+  var button = document.getElementById("myButton");
+  if (button.innerHTML === "Click Me") {
+    button.innerHTML = "Clicked!";
+  } else {
+    button.innerHTML = "Click Me";
+  }
+  button.classList.add("animate");
+  setTimeout(function(){
+    button.classList.remove("animate");
+  }, 500);
+}
+
+</script>

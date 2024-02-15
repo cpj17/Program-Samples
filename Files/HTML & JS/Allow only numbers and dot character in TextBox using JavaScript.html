@@ -1,0 +1,27 @@
+<head>
+    <script type="text/javascript">
+        function onlyNumbersWithDot(e) {           
+            var charCode;
+            if (e.keyCode > 0) {
+                charCode = e.which || e.keyCode;
+            }
+            else if (typeof (e.charCode) != "undefined") {
+                charCode = e.which || e.keyCode;
+            }
+            if (charCode == 46)
+                return true
+            if (charCode > 31 && (charCode <48 || charCode > 57))
+                return false;
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div>
+        <input type="text" name="name" onkeypress="return onlyNumbersWithDot(event);" />
+    </div>
+    </form>
+</body>
+</html>
+

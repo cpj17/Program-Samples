@@ -1,0 +1,29 @@
+For Local DB in PHP 
+ 
+Applink 
+https://sqlitebrowser.org/dl/ 
+ 
+Code 
+<?php 
+ class MyDB extends SQLite3 { 
+  function __construct() { 
+   $this->open('myDataBase.db'); 
+  } 
+ } 
+ $db = new MyDB(); 
+?> 
+ 
+//List 
+//$sql = "select * from myTable"; 
+ //$result = $db->query($sql); 
+  
+ //$row = $result->fetchArray(SQLITE3_ASSOC); 
+  
+ //echo $row["key"]; 
+ 
+//DML 
+$sql = "insert into myTable('key', 'value', 'ref_1', 'ref_no_1') values ('k1', 'v1', '', '')"; 
+ if($db->exec($sql)) 
+  echo 1; 
+ else 
+  echo 0;

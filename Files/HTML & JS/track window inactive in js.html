@@ -1,0 +1,42 @@
+<h1>
+TEST
+</h1>
+
+<script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<script>
+var timeoutInMiliseconds = 3 * 1000;
+var timeoutId; 
+  
+function startTimer() { 
+    // window.setTimeout returns an Id that can be used to start and stop a timer
+    timeoutId = window.setTimeout(doInactive, timeoutInMiliseconds)
+}
+  
+function doInactive() {
+    // does whatever you need it to actually do - probably signs them out or stops polling the server for info
+	alert("inactive")
+}
+ 
+function setupTimers () {
+	<!-- alert("in setupTimers") -->
+    document.addEventListener("mousemove", resetTimer, false);
+    document.addEventListener("mousedown", resetTimer, false);
+    document.addEventListener("keypress", resetTimer, false);
+    document.addEventListener("touchmove", resetTimer, false);
+     
+    startTimer();
+}
+
+function resetTimer() { 
+	<!-- alert("reset function") -->
+    window.clearTimeout(timeoutId)
+    startTimer();
+}
+
+ $(document).ready(function(){ 
+	<!-- alert(123) -->
+	setupTimers();
+});
+</script>
