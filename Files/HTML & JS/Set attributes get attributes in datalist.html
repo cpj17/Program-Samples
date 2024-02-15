@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Datalist with Attributes</title>
+</head>
+<body>
+
+  <label for="fruits">Select a fruit:</label>
+  <input list="fruitList" id="fruits" name="fruits" />
+  <datalist id="fruitList">
+    <option value="Apple" data-color="red"></option>
+    <option value="Banana" data-color="yellow"></option>
+    <option value="Orange" data-color="orange"></option>
+    <option value="Grape" data-color="purple"></option>
+  </datalist>
+
+  <script>
+    document.getElementById('fruits').addEventListener('input', function() {
+      var selectedOption = document.querySelector('#fruitList option[value="' + this.value + '"]');
+      if (selectedOption) {
+        var color = selectedOption.getAttribute('data-color');
+        console.log('Selected fruit color:', color);
+      }
+    });
+  </script>
+
+</body>
+</html>

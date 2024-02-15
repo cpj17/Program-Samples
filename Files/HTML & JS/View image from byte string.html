@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Image from Byte String</title>
+</head>
+<body>
+
+<!-- Create an img tag with an id for easy reference -->
+<img id="imageTag" alt="Image">
+
+<script>
+// Your byte string representing the image
+const byteString = "YourByteStringHere"; // Replace with your actual byte string
+
+// Convert the byte string to a data URL
+const dataURL = "data:image/png;base64," + byteString;
+
+// Get the img tag by its id
+const imageTag = document.getElementById("imageTag");
+
+// Set the src attribute of the img tag to the data URL
+imageTag.src = dataURL;
+</script>
+
+</body>
+</html>
