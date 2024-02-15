@@ -1,0 +1,3 @@
+const input = document.getElementById('first_name'); input.setSelectionRange(3, 3); 
+ 
+set cursor at particular position using JS

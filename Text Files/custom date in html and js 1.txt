@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bootstrap Datetimepicker Disable Specific Dates Example - ItSolutionStuff.com</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Bootstrap Datetimepicker Disable Specific Dates Example - ItSolutionStuff.com</h2>
+    <div class="row">
+        <div class='col-sm-6'>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepickerDemo'>
+                    <input type='text' class="form-control" id="dateInput" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        var disabledDate = ['2023-09-14', '2023-09-15', '2023-09-26'];
+        var minDate = '2023-09-23'; // Define your minimum date here
+
+        var datetimepickerDemo = $('#datetimepickerDemo').datetimepicker({
+            format: 'YYYY-MM-DD',
+            disabledDates: disabledDate,
+            minDate: minDate // Set the minimum date
+        });
+
+        $('#dateInput').on('click', function () {
+            datetimepickerDemo.data('DateTimePicker').show();
+        });
+    });
+</script>
+
+</body>
+</html>
+
+
+
+
+---------------------------------------------------------------------------------
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bootstrap Datetimepicker Disable Weekends Example - ItSolutionStuff.com</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+    <style>
+        /* Define custom styles for disabled dates */
+        .datepicker td.day.disabled {
+            background-color: #f2f2f2; /* Change the background color */
+            color: #999; /* Change the text color */
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Bootstrap Datetimepicker Disable Weekends Example - ItSolutionStuff.com</h2>
+    <div class="row">
+        <div class='col-sm-6'>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepickerDemo'>
+                    <input type='text' class="form-control" id="dateInput" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        var disabledDate = ['2023-09-14', '2023-09-15', '2023-09-16'];
+        var minDate = '2023-09-10';
+
+        var datetimepickerDemo = $('#datetimepickerDemo').datetimepicker({
+            format: 'YYYY-MM-DD',
+            disabledDates: disabledDate,
+            minDate: minDate,
+            daysOfWeekDisabled: [0, 6] // Disable Sunday (0) and Saturday (6)
+        });
+
+        $('#dateInput').on('click', function () {
+            datetimepickerDemo.data('DateTimePicker').show();
+        });
+		
+		 // Add an event listener to capture the selected date and alert it
+        datetimepickerDemo.on('dp.change', function (e) {
+            var selectedDate = e.date.format('YYYY-MM-DD');
+            alert('Selected Date: ' + selectedDate);
+        });
+    });
+</script>
+
+</body>
+</html>

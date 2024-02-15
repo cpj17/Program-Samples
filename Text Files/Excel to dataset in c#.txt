@@ -1,0 +1,22 @@
+using System.Data;
+using System.Data.OleDb;
+
+// ...
+
+string filePath = "path/to/excel/file.xlsx";
+string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filePath + ";Extended Properties=\"Excel 12.0;HDR=YES;IMEX=1;\"";
+// The "HDR=YES" option indicates that the first row of the worksheet contains column headers.
+// The "IMEX=1" option tells the provider to always read intermixed data types as text.
+
+OleDbConnection connection = new OleDbConnection(connectionString);
+connection.Open();
+
+DataTable schemaTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+string sheetName = schemaTable.Rows[0]["TABLE_NAME"].ToString();
+// This gets the name of the first worksheet in the workbook.
+
+OleDbDataAdapter adapter = new OleDbDataAdapter("SELECT * FROM [" + sheetName + "]", connection);
+DataSet dataSet = new DataSet();
+adapter.Fill(dataSet);
+
+connection.Close();

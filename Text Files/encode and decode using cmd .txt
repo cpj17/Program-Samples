@@ -1,0 +1,6 @@
+encode and decode using cmd 
+ 
+certutil -encode a.txt b.txt 
+certutil -decode b.txt c.txt 
+ 
+Here 1st file is source and next is output file

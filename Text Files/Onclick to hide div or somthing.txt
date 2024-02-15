@@ -1,0 +1,3 @@
+onclick="this.parentElement.style.display='none'"
+
+Onclick to hide div or somthing

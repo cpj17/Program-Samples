@@ -1,0 +1,67 @@
+using System;
+using System.Data;
+using System.IO;
+using OfficeOpenXml;
+
+namespace Test_001
+{
+    class Program
+    {
+        static void Main()
+        {
+            try
+            {
+                string filePath = @"C:\Users\GSIAD-031\Desktop\Portal Data required v1.xlsx";
+                DataSet dataSet = ConvertExcelToDataSet(filePath);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private static DataSet ConvertExcelToDataSet(string filePath)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Set the license context accordingly
+
+            var fileInfo = new FileInfo(filePath);
+            using (var package = new ExcelPackage(fileInfo))
+            {
+                DataSet dataSet = new DataSet();
+
+                foreach (var worksheet in package.Workbook.Worksheets)
+                {
+                    var dataTable = new DataTable(worksheet.Name);
+                    dataSet.Tables.Add(dataTable);
+
+                    // Read the header row and populate DataColumn objects
+                    var headerRow = worksheet.Cells[1, 1, 1, worksheet.Dimension.End.Column];
+                    foreach (var cell in headerRow)
+                    {
+                        dataTable.Columns.Add(cell.Text);
+                    }
+
+                    // Read the data rows and populate DataRow objects
+                    var startRow = worksheet.Dimension.Start.Row + 1;
+                    var endRow = worksheet.Dimension.End.Row;
+                    for (int row = startRow; row <= endRow; row++)
+                    {
+                        var dataRow = dataTable.NewRow();
+                        var rowCells = worksheet.Cells[row, 1, row, worksheet.Dimension.End.Column];
+                        var cellIndex = 0;
+
+                        foreach (var cell in rowCells)
+                        {
+                            dataRow[cellIndex] = cell.Text;
+                            cellIndex++;
+                        }
+
+                        dataTable.Rows.Add(dataRow);
+                    }
+                }
+
+                return dataSet;
+            }
+        }
+    }
+}

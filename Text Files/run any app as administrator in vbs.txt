@@ -1,0 +1,5 @@
+run any app as administrator in vbs
+
+set sApp = CreateObject("shell.Application") 
+ 
+sApp.ShellExecute "C:\Users\GSIAD-031\Desktop\testb.bat",,,"runas",1

@@ -1,0 +1,8 @@
+javascript pageload or ready function
+
+<script src="js/jquery.min.js"></script>
+<script> 
+     $(document).ready(function(){  
+    alert(123) 
+}); 
+</script>

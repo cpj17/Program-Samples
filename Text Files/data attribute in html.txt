@@ -1,0 +1,64 @@
+data attribute in html
+
+get data attribute value
+
+code (begins)
+
+<div
+  id="test-div"
+  data-first-name="Kyle"
+  data-last-name="Cook"
+  data-active
+></div>
+
+<script>
+const div = document.getElementById("test-div")
+
+console.log(div.dataset.firstName)
+// Kyle
+console.log(div.dataset.lastName)
+// Cook
+</script>
+
+code (ends)
+
+method 2
+code (begins)
+
+<span id="spn" data-value="spn value"> span text </span>
+
+<script>
+alert(document.getElementById("spn").getAttribute("data-value"))
+</script>
+
+code (ends)
+
+set attribute value
+
+method 1
+code (begins)
+
+<div id="div1" data-ttlitems="1">  </div>
+
+<script>
+const div = document.getElementById("div1")
+alert("before change : " + div.dataset.ttlitems)
+div.dataset.ttlitems = "101"
+alert("after change : " + div.dataset.ttlitems)
+</script>
+
+code (ends)
+
+method 2
+code (begins)
+
+<div id="div1" data-ttlitems="1">  </div>
+
+<script>
+const div = document.getElementById("div1")
+alert("before change : " + div.getAttribute("data-ttlitems"))
+div.dataset.ttlitems = "191"
+alert("after change : " + div.getAttribute("data-ttlitems"))
+</script>
+
+code (ends)

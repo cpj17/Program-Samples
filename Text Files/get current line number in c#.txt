@@ -1,0 +1,5 @@
+get current line number in c#
+
+int n = (new System.Diagnostics.StackFrame(0, true)).GetFileLineNumber();
+
+https://www.youtube.com/watch?v=RcK3-fr1KYc
