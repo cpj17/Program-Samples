@@ -1,0 +1,42 @@
+// Create an HttpClient instance
+                        using (HttpClient client = new HttpClient())
+                        {
+                            // Manually convert the ApiRequest object to a JSON string
+                            string jsonStringToSent = $"{{\"stringAppVariables\":{SerializeStringAppVariables(apiRequest.stringAppVariables)},\"FILEUPLOAD\":\"{apiRequest.FILEUPLOAD}\",\"TRANSACTIONID\":\"{apiRequest.TRANSACTIONID}\",\"FILENAME\":\"{apiRequest.FILENAME}\"}}";
+
+                            // Create a StringContent with the JSON payload
+                            StringContent content = new StringContent(jsonStringToSent, Encoding.UTF8, "application/json");
+
+                            // Make a POST request to the API with the JSON payload in the body
+                            HttpResponseMessage response = await client.PostAsync(apiUrl, content);
+
+                            // Check if the request was successful
+                            if (response.IsSuccessStatusCode)
+                            {
+                                // Read and process the response content
+                                string responseBody = await response.Content.ReadAsStringAsync();
+
+                                JsonDocument documentResponse = JsonDocument.Parse(responseBody);
+                                // Access the root element
+                                JsonElement rootResponse = documentResponse.RootElement;
+                                int n = rootResponse.GetArrayLength();
+                                string status = rootResponse[0].GetProperty("STATUS").ToString();
+                                if (status.ToUpper() == "SUCCESS")
+                                {
+                                    
+                                }
+                                else
+                                {
+                                    stringStatus = status;
+                                    stringErrMsg = rootResponse[0].GetProperty("MESSAGE").ToString();
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                // Handle unsuccessful API request (non-2xx status code)
+                                stringStatus = "FAILED";
+                                stringErrMsg = response.ToString() + "\n" + response.RequestMessage.ToString() + "\n" + response.Content;
+                                break;
+                            }
+                        }
