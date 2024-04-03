@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beautiful Border Design</title>
+<style>
+  html {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background: url(https://images.unsplash.com/photo-1568738351265-c7065f5d4293?w=900) 50%/ cover; */
+  }
+  div .container{
+    --b: 0.5em; /* border width */
+    --c: 3em; /* corner size */
+    --r: 2em; /* corner rounding */
+    position: relative;
+    margin: 0 auto;
+    border: solid var(--b) transparent;
+    padding: 1em;
+    max-width: 23em;
+    font: 1.25em ubuntu, sans-serif;
+    height: 50vh;
+  }
+  .container::before {
+    position: absolute;
+    z-index: -1;
+    inset: calc(-1*var(--b));
+    border: inherit;
+    border-radius: var(--r);
+    background: linear-gradient(orange, deeppink, purple) border-box;
+    --corner: conic-gradient(from -90deg at var(--c) var(--c), red 25%, #000 0 0) 0 0/ calc(100% - var(--c)) calc(100% - var(--c)) border-box;
+    --inner: conic-gradient(red 0 0) padding-box;
+    -webkit-mask: var(--corner), var(--inner);
+    -webkit-mask-composite: source-out;
+    mask: var(--corner) subtract, var(--inner);
+    content: '';
+  }
+</style>
+</head>
+<body>
+
+  <div class="shadow">
+      <div class="container">Halvah chocolate brownie gingerbread marzipan. Cookie candy gummi bears icing croissant liquorice macaroon muffin. Lemon drops apple pie fruit cake chocolate cake pecan pie powder. Ice cream pudding sorbet sesame snaps pastry lollipop chocolate.</div>
+  </div>
+
+</body>
+</html>

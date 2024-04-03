@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text-to-Speech Demo</title>
+</head>
+<body>
+  <textarea id="text-to-read" rows="4" cols="50">Type something here to hear it spoken aloud...</textarea><br>
+  <label for="speed">Speed:</label>
+  <input type="range" id="speed" min="0.1" max="10" step="0.1" value="1"><br>
+  <label for="voice">Voice:</label>
+  <select id="voice">
+    <option value="">Default</option>
+  </select><br>
+  <button onclick="speak()">Speak</button>
+  <script>
+    // Fetch the available voices
+    var voices = [];
+    speechSynthesis.onvoiceschanged = function() {
+      voices = speechSynthesis.getVoices();
+      var voiceSelect = document.getElementById('voice');
+      voices.forEach(function(voice, index) {
+        var option = document.createElement('option');
+        option.value = index;
+        option.textContent = voice.name + ' (' + voice.lang + ')';
+        voiceSelect.appendChild(option);
+      });
+    };
+
+    function speak() {
+      // Get the text to be spoken
+      var text = document.getElementById("text-to-read").value;
+      
+      // Create an instance of SpeechSynthesisUtterance
+      var utterance = new SpeechSynthesisUtterance(text);
+      
+      // Get the SpeechSynthesis object
+      var synth = window.speechSynthesis;
+
+      // Set the speed
+      var speed = parseFloat(document.getElementById('speed').value);
+      utterance.rate = speed;
+      
+      // Set the voice
+      var selectedVoiceIndex = document.getElementById('voice').value;
+      if (selectedVoiceIndex !== "") {
+        utterance.voice = voices[selectedVoiceIndex];
+      }
+      
+      // Speak the text
+      synth.speak(utterance);
+    }
+  </script>
+</body>
+</html>
