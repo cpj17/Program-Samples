@@ -1,0 +1,104 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<style>
+    div {
+        height: 150px;
+        width: 150px;
+        background-color: cyan;
+    }
+</style>
+
+<label for=""> button click </label>
+<button> Button 1 </button>
+<button> Button 2 </button>
+
+<p> click me 1 </p>
+<p> click me 2 </p>
+
+<div id="div1"> click div to hide without transition </div> <br>
+<div id="div2"> click div to hide with transition </div> <br>
+
+<hr> <br>
+<label for=""> show hide div </label> <br>
+
+<button id="btn1"> show div </button>
+<div id="div3" hidden> div asso with btn1 </div>
+
+<button id="btn2"> show div with transition </button>
+<div id="div4" hidden> div asso with btn2 </div>
+
+<hr> <br>
+<label for=""> toggle div </label> <br>
+
+<button id="btn3"> toggle div w/o trans </button>
+<div id="div5"> oggle div w/o trans </div>
+
+<button id="btn4"> toggle div w/ trans </button>
+<div id="div6"> oggle div w/ trans </div>
+
+<hr> <br>
+<label for=""> show hide toggle with callback </label> <br>
+
+<button id="btn5"> btn for hide div w/ callback </button>
+<div id="div7"> hide div w/ callback </div>
+
+
+<script>
+    //Method 1
+    // $("button").click(function() {
+    //     alert("button clicked")
+    // })
+
+    //Method 2
+    // $("button").click(function() {
+    //     alert($(this).text())
+    // })
+
+    $("p").click(function() {
+        $(this).css("color", "red")
+    })
+
+    //Hide Without transition
+    $("#div1").click(function() {
+        $(this).hide()
+    })
+
+    //Hide With transition
+    $("#div2").click(function() {
+        $(this).hide(2000)
+    })
+
+    //Show Without Transition
+    $("#btn1").click(function() {
+        $("#div3").show()
+    })
+
+    //Show With Transition
+    $("#btn2").click(function() {
+        $("#div4").show(2000)
+    })
+
+    //Toglle div w/o trans
+    $("#btn3").click(function (){
+        $("#div5").toggle()
+    })
+
+    //Toglle div w/ trans
+    $("#btn4").click(function (){
+        $("#div6").toggle(2000)
+    })
+
+    //hide div w/ callback -1
+    // $("#btn5").click(function() {
+    //     $("#div7").hide(0, function() {
+    //         alert("after hide")
+    //     })
+    // })
+
+    //hide div w/ callback - 2
+    $("#btn5").click(function() {
+        $("#div7").hide(function() {
+            alert("after hide")
+        })
+    })
+</script>
