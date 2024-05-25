@@ -1,0 +1,252 @@
+<!-- To enable pinch zoom on a video in an HTML document, you can make use of CSS transformations and JavaScript to handle the zooming functionality. The object-fit: contain property ensures the video maintains its aspect ratio, but for zooming, you'll need to add some event listeners to handle pinch gestures. -->
+
+<!-- <!DOCTYPE html> -->
+<!-- <html lang="en"> -->
+<!-- <head> -->
+    <!-- <meta charset="UTF-8"> -->
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <!-- <title>Responsive Video with Pinch Zoom</title> -->
+    <!-- <style> -->
+        <!-- body, html { -->
+            <!-- height: 100%; -->
+            <!-- margin: 0; -->
+        <!-- } -->
+        <!-- .video-container { -->
+            <!-- position: relative; -->
+            <!-- width: 100%; -->
+            <!-- height: 100%; -->
+            <!-- overflow: hidden; -->
+        <!-- } -->
+        <!-- .video-container video { -->
+            <!-- width: 100%; -->
+            <!-- height: 100%; -->
+            <!-- object-fit: contain; -->
+            <!-- transform-origin: center center; -->
+            <!-- touch-action: none; -->
+        <!-- } -->
+    <!-- </style> -->
+<!-- </head> -->
+<!-- <body> -->
+    <!-- <div class="video-container"> -->
+        <!-- <video id="video" src="vid.mp4" controls controlsList="nodownload"></video> -->
+    <!-- </div> -->
+    <!-- <script> -->
+        <!-- const video = document.getElementById('video'); -->
+        <!-- let scale = 1; -->
+        <!-- let initialPinchDistance = null; -->
+
+        <!-- video.addEventListener('wheel', (event) => { -->
+            <!-- event.preventDefault(); -->
+            <!-- const delta = Math.sign(event.deltaY); -->
+            <!-- scale += delta * -0.1; -->
+            <!-- scale = Math.min(Math.max(.125, scale), 4); -->
+            <!-- video.style.transform = `scale(${scale})`; -->
+        <!-- }); -->
+
+        <!-- video.addEventListener('touchstart', (event) => { -->
+            <!-- if (event.touches.length === 2) { -->
+                <!-- initialPinchDistance = getPinchDistance(event.touches); -->
+            <!-- } -->
+        <!-- }); -->
+
+        <!-- video.addEventListener('touchmove', (event) => { -->
+            <!-- if (event.touches.length === 2) { -->
+                <!-- event.preventDefault(); -->
+                <!-- const currentPinchDistance = getPinchDistance(event.touches); -->
+                <!-- if (initialPinchDistance) { -->
+                    <!-- const pinchRatio = currentPinchDistance / initialPinchDistance; -->
+                    <!-- scale *= pinchRatio; -->
+                    <!-- scale = Math.min(Math.max(.125, scale), 4); -->
+                    <!-- video.style.transform = `scale(${scale})`; -->
+                    <!-- initialPinchDistance = currentPinchDistance; -->
+                <!-- } -->
+            <!-- } -->
+        <!-- }); -->
+
+        <!-- function getPinchDistance(touches) { -->
+            <!-- const [touch1, touch2] = touches; -->
+            <!-- const dx = touch1.clientX - touch2.clientX; -->
+            <!-- const dy = touch1.clientY - touch2.clientY; -->
+            <!-- return Math.sqrt(dx * dx + dy * dy); -->
+        <!-- } -->
+    <!-- </script> -->
+<!-- </body> -->
+<!-- </html> -->
+
+
+<!-- To prevent the video from zooming out beyond its original size, you can adjust the JavaScript code to ensure the scale never goes below 1. Here's the updated code with this functionality: -->
+
+<!-- <!DOCTYPE html> -->
+<!-- <html lang="en"> -->
+<!-- <head> -->
+    <!-- <meta charset="UTF-8"> -->
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <!-- <title>Responsive Video with Pinch Zoom</title> -->
+    <!-- <style> -->
+        <!-- body, html { -->
+            <!-- height: 100%; -->
+            <!-- margin: 0; -->
+        <!-- } -->
+        <!-- .video-container { -->
+            <!-- position: relative; -->
+            <!-- width: 100%; -->
+            <!-- height: 100%; -->
+            <!-- overflow: hidden; -->
+        <!-- } -->
+        <!-- .video-container video { -->
+            <!-- width: 100%; -->
+            <!-- height: 100%; -->
+            <!-- object-fit: contain; -->
+            <!-- transform-origin: center center; -->
+            <!-- touch-action: none; -->
+        <!-- } -->
+    <!-- </style> -->
+<!-- </head> -->
+<!-- <body> -->
+    <!-- <div class="video-container"> -->
+        <!-- <video id="video" src="vid.mp4" controls controlsList="nodownload"></video> -->
+    <!-- </div> -->
+    <!-- <script> -->
+        <!-- const video = document.getElementById('video'); -->
+        <!-- let scale = 1; -->
+        <!-- let initialPinchDistance = null; -->
+
+        <!-- video.addEventListener('wheel', (event) => { -->
+            <!-- event.preventDefault(); -->
+            <!-- const delta = Math.sign(event.deltaY); -->
+            <!-- scale += delta * -0.1; -->
+            <!-- scale = Math.max(1, Math.min(scale, 4)); -->
+            <!-- video.style.transform = `scale(${scale})`; -->
+        <!-- }); -->
+
+        <!-- video.addEventListener('touchstart', (event) => { -->
+            <!-- if (event.touches.length === 2) { -->
+                <!-- initialPinchDistance = getPinchDistance(event.touches); -->
+            <!-- } -->
+        <!-- }); -->
+
+        <!-- video.addEventListener('touchmove', (event) => { -->
+            <!-- if (event.touches.length === 2) { -->
+                <!-- event.preventDefault(); -->
+                <!-- const currentPinchDistance = getPinchDistance(event.touches); -->
+                <!-- if (initialPinchDistance) { -->
+                    <!-- const pinchRatio = currentPinchDistance / initialPinchDistance; -->
+                    <!-- scale *= pinchRatio; -->
+                    <!-- scale = Math.max(1, Math.min(scale, 4)); -->
+                    <!-- video.style.transform = `scale(${scale})`; -->
+                    <!-- initialPinchDistance = currentPinchDistance; -->
+                <!-- } -->
+            <!-- } -->
+        <!-- }); -->
+
+        <!-- function getPinchDistance(touches) { -->
+            <!-- const [touch1, touch2] = touches; -->
+            <!-- const dx = touch1.clientX - touch2.clientX; -->
+            <!-- const dy = touch1.clientY - touch2.clientY; -->
+            <!-- return Math.sqrt(dx * dx + dy * dy); -->
+        <!-- } -->
+    <!-- </script> -->
+<!-- </body> -->
+<!-- </html> -->
+
+
+<!-- To enable panning (moving the zoomed video left and right) along with pinch zoom functionality, you can modify the JavaScript to handle dragging. Here's the updated code with panning functionality: -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Video with Pinch Zoom and Pan</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            touch-action: none;
+        }
+        .video-container video {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transform-origin: center center;
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <video id="video" src="vid.mp4" controls controlsList="nodownload"></video>
+    </div>
+    <script>
+        const video = document.getElementById('video');
+        let scale = 1;
+        let initialPinchDistance = null;
+        let initialPinchScale = 1;
+        let panX = 0;
+        let panY = 0;
+        let startX = 0;
+        let startY = 0;
+        let isPanning = false;
+
+        video.addEventListener('wheel', (event) => {
+            event.preventDefault();
+            const delta = Math.sign(event.deltaY);
+            scale += delta * -0.1;
+            scale = Math.max(1, Math.min(scale, 4));
+            updateTransform();
+        });
+
+        video.addEventListener('touchstart', (event) => {
+            if (event.touches.length === 2) {
+                initialPinchDistance = getPinchDistance(event.touches);
+                initialPinchScale = scale;
+            } else if (event.touches.length === 1 && scale > 1) {
+                isPanning = true;
+                startX = event.touches[0].clientX - panX;
+                startY = event.touches[0].clientY - panY;
+            }
+        });
+
+        video.addEventListener('touchmove', (event) => {
+            if (event.touches.length === 2) {
+                event.preventDefault();
+                const currentPinchDistance = getPinchDistance(event.touches);
+                if (initialPinchDistance) {
+                    scale = initialPinchScale * (currentPinchDistance / initialPinchDistance);
+                    scale = Math.max(1, Math.min(scale, 4));
+                    updateTransform();
+                }
+            } else if (event.touches.length === 1 && isPanning) {
+                event.preventDefault();
+                panX = event.touches[0].clientX - startX;
+                panY = event.touches[0].clientY - startY;
+                updateTransform();
+            }
+        });
+
+        video.addEventListener('touchend', () => {
+            if (event.touches.length < 2) {
+                initialPinchDistance = null;
+                isPanning = false;
+            }
+        });
+
+        function getPinchDistance(touches) {
+            const [touch1, touch2] = touches;
+            const dx = touch1.clientX - touch2.clientX;
+            const dy = touch1.clientY - touch2.clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+        function updateTransform() {
+            video.style.transform = `scale(${scale}) translate(${panX / scale}px, ${panY / scale}px)`;
+        }
+    </script>
+</body>
+</html>
