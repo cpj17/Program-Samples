@@ -1,0 +1,116 @@
+//stored procedure
+//CREATE TYPE dbo.MyDataTableType AS TABLE
+//(
+//    id INT,
+//    name NVARCHAR(50)
+//);
+//CREATE PROCEDURE dbo.InsertData
+//    @MyData dbo.MyDataTableType READONLY
+//AS
+//BEGIN
+//    INSERT INTO YourDestinationTableName (id, name)
+//    SELECT id, name
+//    FROM @MyData;
+//END;
+
+
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace DT_InsertTo_DB
+{
+    public partial class _Default : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnTest_Click(object sender, EventArgs e)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("id", typeof(int));
+            dt.Columns.Add("name", typeof(string));
+
+            dt.Rows.Add(9, "name9");
+            dt.Rows.Add(10, "name10");
+            dt.Rows.Add(11, "name11");
+
+            //Method1(dt);
+            InsertDataUsingStoredProcedure(dt);
+        }
+
+        private void Method1(DataTable dt)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["YourConnectionStringName"].ConnectionString;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connection))
+                {
+                    // Set the destination table name
+                    bulkCopy.DestinationTableName = "testData2"; // Update with your actual table name
+
+                    try
+                    {
+                        // Map the columns from the DataTable to the SQL Server table
+                        bulkCopy.ColumnMappings.Add("id", "id");
+                        bulkCopy.ColumnMappings.Add("name", "name");
+
+                        // Write the data to the SQL Server table
+                        bulkCopy.WriteToServer(dt);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+            }
+        }
+
+        public void InsertDataUsingStoredProcedure(DataTable dt)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["YourConnectionStringName"].ConnectionString;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("InsertData", connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Add the table-valued parameter
+                    SqlParameter tvpParam = cmd.Parameters.AddWithValue("@MyData", dt);
+                    tvpParam.SqlDbType = SqlDbType.Structured;
+                    tvpParam.TypeName = "dbo.MyDataTableType";
+
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+    }
+}
+
+
+//stored procedure
+//CREATE TYPE dbo.MyDataTableType AS TABLE
+//(
+//    id INT,
+//    name NVARCHAR(50)
+//);
+//CREATE PROCEDURE dbo.InsertData
+//    @MyData dbo.MyDataTableType READONLY
+//AS
+//BEGIN
+//    INSERT INTO YourDestinationTableName (id, name)
+//    SELECT id, name
+//    FROM @MyData;
+//END;

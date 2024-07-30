@@ -1,0 +1,41 @@
+DataTable dt = new DataTable();
+dt.Columns.Add("id", typeof(int));
+dt.Columns.Add("name", typeof(string));
+
+dt.Rows.Add(9, "name9");
+dt.Rows.Add(10, "name10");
+dt.Rows.Add(11, "name11");
+
+
+using System.Data;
+using System.Data.SqlClient;
+
+public void InsertDataToSqlServer(DataTable dt)
+{
+    string connectionString = "your_connection_string_here"; // Update with your actual connection string
+
+    using (SqlConnection connection = new SqlConnection(connectionString))
+    {
+        connection.Open();
+
+        using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connection))
+        {
+            // Set the destination table name
+            bulkCopy.DestinationTableName = "YourDestinationTableName"; // Update with your actual table name
+
+            try
+            {
+                // Map the columns from the DataTable to the SQL Server table
+                bulkCopy.ColumnMappings.Add("id", "id");
+                bulkCopy.ColumnMappings.Add("name", "name");
+
+                // Write the data to the SQL Server table
+                bulkCopy.WriteToServer(dt);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+    }
+}
