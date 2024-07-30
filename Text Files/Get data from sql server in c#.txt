@@ -1,0 +1,112 @@
+private void GetDataByCommand()
+{
+    try
+    {
+        string connectionString = ConfigurationManager.ConnectionStrings["YourConnectionStringName"].ConnectionString;
+        SqlConnection connection = new SqlConnection(connectionString);
+        string query = "select * from testData";
+        SqlCommand command = new SqlCommand(query, connection);
+        SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+
+        try
+        {
+            connection.Open();
+            dataAdapter.Fill(dataTable);
+            BindGridView();
+        }
+        catch (Exception ex)
+        {
+            Response.Write("Error: " + ex.Message);
+        }
+    }
+    catch (Exception objException)
+    {
+        ShowMessage(objException.Message, "Error", "error");
+    }
+}
+
+private void GetDataByStoredProcedure()
+{
+    try
+    {
+        string connectionString = ConfigurationManager.ConnectionStrings["YourConnectionStringName"].ConnectionString;
+        SqlConnection connection = new SqlConnection(connectionString);
+        
+        SqlCommand command = new SqlCommand("GetDataFromTestTable", connection);
+        command.CommandType = System.Data.CommandType.StoredProcedure;
+
+        command.Parameters.AddWithValue("@rec_from", "1");
+        command.Parameters.AddWithValue("@rec_to", "3");
+
+        SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
+
+        try
+        {
+            connection.Open();
+            dataAdapter.Fill(dataTable);
+            BindGridView();
+        }
+        catch (Exception ex)
+        {
+            Response.Write("Error: " + ex.Message);
+        }
+    }
+    catch (Exception objException)
+    {
+        ShowMessage(objException.Message, "Error", "error");
+    }
+}
+
+//refer stored procedure for get data
+
+//Get data using stored procedure
+//
+//CREATE PROCEDURE GetDataFromTestTable
+//    @rec_from INT = NULL,
+//    @rec_to INT = NULL,
+//    @condition NVARCHAR(MAX) = NULL,
+//    @orderby NVARCHAR(MAX) = NULL
+//AS
+//BEGIN
+//    SET NOCOUNT ON;
+//
+//    DECLARE @sql NVARCHAR(MAX);
+//    DECLARE @params NVARCHAR(MAX) = N'@rec_from INT, @rec_to INT';
+//
+//    -- Build the base SQL query
+//    SET @sql = 'SELECT * FROM testData';
+//
+//    -- Add WHERE clause based on @condition parameter
+//    IF @condition IS NOT NULL
+//    BEGIN
+//        SET @sql = @sql + ' WHERE ' + @condition;
+//    END
+//
+//    -- Add ORDER BY clause based on @orderby parameter
+//    IF @orderby IS NOT NULL
+//    BEGIN
+//        SET @sql = @sql + ' ORDER BY ' + @orderby;
+//    END
+//
+//    -- Add OFFSET FETCH for pagination based on @rec_from and @rec_to parameters
+//    IF @rec_from IS NOT NULL AND @rec_to IS NOT NULL
+//    BEGIN
+//        SET @sql = @sql + ' ORDER BY (SELECT NULL) OFFSET @rec_from ROWS FETCH NEXT @rec_to ROWS ONLY';
+//    END
+//
+//    -- Execute dynamic SQL with parameters
+//    EXEC sp_executesql @sql, @params, @rec_from = @rec_from, @rec_to = @rec_to;
+//END;
+//
+//
+//-- Example 1: Retrieve all rows
+//EXEC GetDataFromTestTable;
+//
+//-- Example 2: Retrieve rows with a condition and order by
+//EXEC GetDataFromTestTable @condition = 'userid = ''johndoe123''', @orderby = 'fullname DESC';
+//
+//-- Example 3: Retrieve paginated rows
+//EXEC GetDataFromTestTable @rec_from = 0, @rec_to = 10;
+//
+//-- Example 4: Retrieve paginated rows with condition and order by
+//EXEC GetDataFromTestTable @rec_from = 10, @rec_to = 20, @condition = 'gender = ''Male''', @orderby = 'userid';

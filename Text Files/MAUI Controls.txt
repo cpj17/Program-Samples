@@ -1,0 +1,52 @@
+In .NET MAUI (Multi-platform App UI), you have access to a variety of controls that you can use to build the user interface of your applications. These controls provide a range of functionalities from displaying text and images to accepting user input and interacting with data. Here's a list of common controls available in .NET MAUI:
+
+Basic Controls:
+	1. Label: Displays a static text.
+	2. Entry: Allows the user to input text.
+	3. Button: Triggers an action when clicked.
+	4. Image: Displays an image.
+	5. BoxView: Displays a colored box.
+
+Layout Controls:
+	6. StackLayout: Arranges child views in a single line, either horizontally or vertically.
+	7. GridLayout: Arranges child views in a grid format with rows and columns.
+	8. ScrollView: Provides scrollable content.
+	9. AbsoluteLayout: Positions child views at specific coordinates.
+
+Selection Controls:
+	10. Picker: Displays a dropdown list of items for selection.
+	11. DatePicker: Allows the user to select a date.
+	12. TimePicker: Allows the user to select a time.
+	13. Switch: Represents an on/off switch.
+
+Collection Controls:
+	14. ListView: Displays a list of data items with customizable cell layouts.
+	15. CollectionView: Enhanced version of ListView for displaying collections with more flexibility and features.
+	16. CarouselView: Displays items in a carousel-like layout, allowing swiping between items.
+
+Input Controls:
+	17. Slider: Allows the user to select a value from a range by sliding a thumb.
+	18. Stepper: Allows the user to increment or decrement a value by tapping buttons.
+
+WebView Controls:
+	19. WebView: Displays web content within the app.
+
+Media Controls:
+	20. MediaElement: Plays audio and video content.
+
+Miscellaneous Controls:
+	21. ActivityIndicator: Shows that an operation is ongoing.
+	22. ProgressBar: Indicates the progress of a task.
+	23. SearchBar: Provides a text field for searching.
+
+Gesture Controls:
+	24.Gesture Recognizers: Tap, pinch, swipe, pan, rotate, etc., gestures recognized on UI elements.
+
+Templated Controls:
+	25. Templated View: Allows creating custom views with complex templates.
+
+Custom Controls:
+	26. Custom Controls: You can create custom controls by extending existing controls or creating entirely new ones to suit your specific application needs.
+
+Platform-Specific Controls:
+	27. Platform-Specific Controls: Access to native controls and functionalities specific to each platform (iOS, Android, Windows).

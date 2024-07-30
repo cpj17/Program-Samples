@@ -1,0 +1,169 @@
+Using a Stored Procedure
+	1. Create a Stored Procedure in SQL Server
+	First, create a stored procedure in your SQL Server database:
+
+
+
+CREATE PROCEDURE InsertData
+    @Name NVARCHAR(50),
+    @Age INT
+AS
+BEGIN
+    INSERT INTO YourTable (Name, Age)
+    VALUES (@Name, @Age)
+END
+
+
+C# code
+
+using System;
+using System.Configuration;
+using System.Data.SqlClient;
+
+namespace YourNamespace
+{
+    public partial class InsertData : System.Web.UI.Page
+    {
+        protected void btnSubmit_Click(object sender, EventArgs e)
+        {
+            string name = txtName.Text;
+            int age = int.Parse(txtAge.Text);
+
+            string connectionString = ConfigurationManager.ConnectionStrings["YourConnectionStringName"].ConnectionString;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand("InsertData", connection);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@Name", name);
+                command.Parameters.AddWithValue("@Age", age);
+
+                try
+                {
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    Response.Write("Data inserted successfully.");
+                }
+                catch (Exception ex)
+                {
+                    Response.Write("Error: " + ex.Message);
+                }
+            }
+        }
+    }
+}
+
+
+//My codes
+
+private void InsertUsingCommandMethod()
+{
+    try
+    {
+        string connectionString = ConfigurationManager.ConnectionStrings["YourConnectionStringName"].ConnectionString;
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            string query = "INSERT INTO testData (uniqueid, fullname, userid, email, phone_number, password, gender) VALUES (@uniqueid, @fullname, @userid, @email, @phone_number, @password, @gender)";
+            SqlCommand command = new SqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@uniqueid", DateTime.Now.ToString("ddMMyyyyhhmmssfffff"));
+            command.Parameters.AddWithValue("@fullname", txtName.Text);
+            command.Parameters.AddWithValue("@userid", txtUsername.Text);
+            command.Parameters.AddWithValue("@email", txtEmail.Text);
+            command.Parameters.AddWithValue("@phone_number", txtPhoneNumber.Text);
+            command.Parameters.AddWithValue("@password", Encrypt(txtPassword.Text));
+            command.Parameters.AddWithValue("@gender", Request.Form["gender"]);
+
+            try
+            {
+                connection.Open();
+                command.ExecuteNonQuery();
+                ShowMessage("Registered Succssfully", "", "success");
+            }
+            catch (Exception objException)
+            {
+                //Response.Write("Error: " + objException.Message);
+                ShowMessage(objException.Message, "Error", "error");
+            }
+        }
+    }
+    catch (Exception objException)
+    {
+        ShowMessage(objException.Message, "Error", "error");
+    }
+}
+
+private void InsertUsingStoredProcedure()
+{
+    try
+    {
+        string connectionString = ConfigurationManager.ConnectionStrings["YourConnectionStringName"].ConnectionString;
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            SqlCommand command = new SqlCommand("insertDataToTestTable", connection);
+            command.CommandType = System.Data.CommandType.StoredProcedure;
+
+            command.Parameters.AddWithValue("@uniqueid", DateTime.Now.ToString("ddMMyyyyhhmmssfffff"));
+            command.Parameters.AddWithValue("@fullname", txtName.Text);
+            command.Parameters.AddWithValue("@userid", txtUsername.Text);
+            command.Parameters.AddWithValue("@email", txtEmail.Text);
+            command.Parameters.AddWithValue("@phone_number", txtPhoneNumber.Text);
+            command.Parameters.AddWithValue("@password", Encrypt(txtPassword.Text));
+            command.Parameters.AddWithValue("@gender", Request.Form["gender"]);
+
+            try
+            {
+                connection.Open();
+                command.ExecuteNonQuery();
+                ShowMessage("Registered Succssfully.", "", "success");
+            }
+            catch (Exception objException)
+            {
+               //Response.Write("Error: " + objException.Message);
+               ShowMessage(objException.Message, "Error", "error");
+            }
+        }
+    }
+    catch (Exception objException)
+    {
+        ShowMessage(objException.Message, "Error", "error");
+    }
+}
+
+
+//stored procedures
+
+//CREATE PROCEDURE InsertDataToTestTable
+//    @uniqueid BIGINT,
+//    @fullname VARCHAR(255),
+//    @userid VARCHAR(255),
+//    @email VARCHAR(255),
+//    @phone_number BIGINT,
+//    @password VARCHAR(255),
+//    @gender VARCHAR(255)
+//AS
+//BEGIN
+//    SET NOCOUNT ON;
+//
+//    -- Check if @userid already exists
+//    IF EXISTS (SELECT 1 FROM testData WHERE userid = @userid)
+//    BEGIN
+//        THROW 50000, 'Userid already exists.', 1;
+//        RETURN;
+//    END
+//
+//    -- Insert data into testData table
+//    INSERT INTO testData (uniqueid, fullname, userid, email, phone_number, password, gender)
+//    VALUES (@uniqueid, @fullname, @userid, @email, @phone_number, @password, @gender);
+//END;
+//
+//
+//-- run stored procedure
+//EXEC InsertDataToTestTable 
+//    @uniqueid = 1,
+//    @fullname = 'John Doe',
+//    @userid = 'johndoe123',
+//    @email = 'john@example.com',
+//    @phone_number = 1234567890,
+//    @password = 'password123',
+//    @gender = 'Male';

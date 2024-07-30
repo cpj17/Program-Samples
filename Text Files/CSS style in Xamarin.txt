@@ -1,0 +1,28 @@
+https://visualstudiomagazine.com/Articles/2018/04/01/Styling-Xamarin-Forms.aspx
+
+
+https://www.telerik.com/blogs/xamarin-forms-styling-with-css
+
+
+
+
+
+
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="HowYouSay.Shared.Views.Cells.MenuCell">
+
+    <StackLayout>
+        <StackLayout.Resources>
+            <StyleSheet Source="../../Styles/MenuCell.css"/>
+        </StackLayout.Resources>
+
+        <Label 
+            StyleClass="MenuListItem" 
+            Text="{Binding Title}"/>
+    </StackLayout>
+</ViewCell>
+
+
+
+.MenuListItem {
+  color: #ffffff;
+  margin-left: 20; }

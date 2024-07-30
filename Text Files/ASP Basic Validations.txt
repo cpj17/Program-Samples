@@ -1,0 +1,40 @@
+ValidatetextControl(new object[] { txtName, txtUsername, txtEmail, txtPhoneNumber, txtPassword, txtConfirmPassword }) && Request.Form["gender"].Length > 0 && IsValidEmail(txtEmail.Text) && IsNumeric(txtPhoneNumber.Text)
+
+private bool ValidatetextControl(object[] objControls)
+{
+    bool boolFlage = true;
+    try
+    {
+        for (int i = 0; i < objControls.Length; i++)
+        {
+            var objTextBox = (TextBox)objControls[i];
+            if (objTextBox.Text.Length == 0)
+                return false;
+        }
+
+        return boolFlage;
+    }
+    catch (Exception objException)
+    {
+        ShowMessage(objException.Message, "Error", "error");
+        return false;
+    }
+}
+
+private bool IsValidEmail(string email)
+{
+    // Regular expression for basic email validation
+    string emailPattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
+
+    // Check if the email matches the pattern
+    return Regex.IsMatch(email, emailPattern);
+}
+
+public static bool IsNumeric(string input)
+{
+    // Regular expression to match only numeric characters
+    string pattern = @"^[0-9]+$";
+
+    // Check if the input matches the pattern
+    return Regex.IsMatch(input, pattern);
+}

@@ -1,0 +1,293 @@
+CREATE TABLE testData (
+    uniqueid bigint,
+    fullname varchar(255),
+    userid varchar(255),
+    email varchar(255),
+	phone_number bigint,
+    password varchar(255),
+	gender varchar(255)
+);
+
+
+drop table testData
+truncate table testData
+
+select * from testData
+
+create procedure insertDataToTestTable
+		@uniqueid bigint,
+		@fullname varchar(255),
+		@userid varchar(255),
+		@email varchar(255),
+		@phone_number bigint,
+		@password varchar(255),
+		@gender varchar(255)
+AS
+BEGIN
+    INSERT INTO testData (uniqueid, fullname, userid, email, phone_number, password, gender) 
+	VALUES (@uniqueid, @fullname, @userid, @email, @phone_number, @password, @gender)
+END
+
+drop procedure insertDataToTestTable
+
+ALTER TABLE testData
+ADD sequence_no BIGINT null;
+
+UPDATE testData
+SET sequence_no = CAST(FORMAT(GETDATE(), 'ddMMyyyyHHmmssff') AS BIGINT);
+
+CREATE TRIGGER trg_DefaultSequenceNo
+ON testData
+INSTEAD OF INSERT
+AS
+BEGIN
+    INSERT INTO testData (uniqueid, fullname, userid, email, phone_number, password, gender, sequence_no) -- list other columns as necessary
+    SELECT uniqueid, fullname, userid, email, phone_number, password, gender, 
+           CAST(FORMAT(GETDATE(), 'ddMMyyyyHHmmssff') AS BIGINT)
+    FROM inserted;
+END;
+
+-------------------------ALTER TABLE testData
+ADD sequence_no BIGINT NOT NULL;
+
+-- Step 2: Set the default value for new rows using a default constraint
+ALTER TABLE testData
+ADD CONSTRAINT DF_sequence_no DEFAULT (CAST(FORMAT(GETDATE(), 'ddMMyyyyHHmmssff') AS BIGINT)) FOR sequence_no;
+
+-- Step 3: Update existing rows with the default value
+UPDATE testData
+SET sequence_no = CAST(FORMAT(GETDATE(), 'ddMMyyyyHHmmssff') AS BIGINT)
+WHERE sequence_no IS NULL;
+
+-- Optional Step 4: Drop the default constraint if not needed anymore
+ALTER TABLE testData
+DROP CONSTRAINT DF_sequence_no;
+
+-- Step 1: Update existing rows with the default value if they are NULL
+UPDATE testData
+SET sequence_no = CAST(FORMAT(GETDATE(), 'ddMMyyyyHHmmssff') AS BIGINT)
+WHERE sequence_no IS NULL;
+
+-- Step 2: Alter the column to set it as NOT NULL
+ALTER TABLE testData
+ALTER COLUMN sequence_no BIGINT NOT NULL;
+
+-- Step 1: Add the new column timestamp to the testData table with a default value
+ALTER TABLE testData
+ADD timestamp BIGINT NOT NULL DEFAULT (CAST(FORMAT(GETDATE(), 'ddMMyyyyHHmmssff') AS BIGINT));
+
+-- Step 2: Update existing rows with the default value if they are NULL (optional, should not be necessary as default is set)
+UPDATE testData
+SET timestamp = CAST(FORMAT(GETDATE(), 'ddMMyyyyHHmmssff') AS BIGINT)
+WHERE timestamp IS NULL;
+
+
+ADD SNO IN TABLE
+ALTER TABLE testData
+ADD sno int NULL;
+
+WITH NumberedRows AS (
+    SELECT sno, ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS RowNum
+    FROM testData
+)
+UPDATE NumberedRows
+SET sno = RowNum;
+
+---------------------------
+CREATE PROCEDURE InsertDataToTestTable
+    @uniqueid BIGINT,
+    @fullname VARCHAR(255),
+    @userid VARCHAR(255),
+    @email VARCHAR(255),
+    @phone_number BIGINT,
+    @password VARCHAR(255),
+    @gender VARCHAR(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Check if @userid already exists
+    IF EXISTS (SELECT 1 FROM testData WHERE userid = @userid)
+    BEGIN
+        THROW 50000, 'Userid already exists.', 1;
+        RETURN;
+    END
+
+    -- Insert data into testData table
+    INSERT INTO testData (uniqueid, fullname, userid, email, phone_number, password, gender)
+    VALUES (@uniqueid, @fullname, @userid, @email, @phone_number, @password, @gender);
+END;
+
+
+-- run stored procedure
+EXEC InsertDataToTestTable 
+    @uniqueid = 1,
+    @fullname = 'John Doe',
+    @userid = 'johndoe123',
+    @email = 'john@example.com',
+    @phone_number = 1234567890,
+    @password = 'password123',
+    @gender = 'Male';
+	
+---------------------------------------
+
+-- Get data using stored procedure
+
+CREATE PROCEDURE GetDataFromTestTable
+    @rec_from INT = NULL,
+    @rec_to INT = NULL,
+    @condition NVARCHAR(MAX) = NULL,
+    @orderby NVARCHAR(MAX) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @sql NVARCHAR(MAX);
+    DECLARE @params NVARCHAR(MAX) = N'@rec_from INT, @rec_to INT';
+
+    -- Build the base SQL query
+    SET @sql = 'SELECT * FROM testData';
+
+    -- Add WHERE clause based on @condition parameter
+    IF @condition IS NOT NULL
+    BEGIN
+        SET @sql = @sql + ' WHERE ' + @condition;
+    END
+
+    -- Add ORDER BY clause based on @orderby parameter
+    IF @orderby IS NOT NULL
+    BEGIN
+        SET @sql = @sql + ' ORDER BY ' + @orderby;
+    END
+
+    -- Add OFFSET FETCH for pagination based on @rec_from and @rec_to parameters
+    IF @rec_from IS NOT NULL AND @rec_to IS NOT NULL
+    BEGIN
+        SET @sql = @sql + ' ORDER BY (SELECT NULL) OFFSET @rec_from ROWS FETCH NEXT @rec_to ROWS ONLY';
+    END
+
+    -- Execute dynamic SQL with parameters
+    EXEC sp_executesql @sql, @params, @rec_from = @rec_from, @rec_to = @rec_to;
+END;
+
+
+-- Example 1: Retrieve all rows
+EXEC GetDataFromTestTable;
+
+-- Example 2: Retrieve rows with a condition and order by
+EXEC GetDataFromTestTable @condition = 'userid = ''johndoe123''', @orderby = 'fullname DESC';
+
+-- Example 3: Retrieve paginated rows
+EXEC GetDataFromTestTable @rec_from = 0, @rec_to = 10;
+
+-- Example 4: Retrieve paginated rows with condition and order by
+EXEC GetDataFromTestTable @rec_from = 10, @rec_to = 20, @condition = 'gender = ''Male''', @orderby = 'userid';
+
+------------------------------------
+
+-- return all column based specific distinct column
+
+WITH RankedCustomers AS (
+    SELECT *,
+           ROW_NUMBER() OVER (PARTITION BY gender ORDER BY gender) as rn
+    FROM testData
+)
+SELECT *
+FROM RankedCustomers
+WHERE rn = 1;
+
+----------------------------------------
+inner join
+
+select testData2.id, name, country from testData2 inner join testData3 on testData2.id = testData3.id
+
+----------------------------
+
+joins
+
+testData2
+id  name
+1	name1
+2	name2
+3	name3
+5	name5
+
+testData3
+id  country
+1	country1
+2	country2
+3	country3
+4	country4
+6	country6
+
+
+select testData2.id, name, country from testData2 join testData3 on testData2.id = testData3.id
+1	name1	country1
+2	name2	country2
+3	name3	country3
+
+select testData2.id, name, country from testData2 left join testData3 on testData2.id = testData3.id
+1	name1	country1
+2	name2	country2
+3	name3	country3
+5	name5	NULL
+
+select testData2.id, name, country from testData3 right join testData2 on testData3.id = testData2.id
+1	name1	country1
+2	name2	country2
+3	name3	country3
+5	name5	NULL
+
+select testData3.id, name, country from testData2 right join testData3 on testData2.id = testData3.id
+1	name1	country1
+2	name2	country2
+3	name3	country3
+4	NULL	country4
+6	NULL	country6
+
+select testData2.id, name, country from testData2 full outer join testData3 on testdata2.id = testData3.id
+1	name1	country1
+2	name2	country2
+3	name3	country3
+5	name5	NULL
+NULL	NULL	country4
+NULL	NULL	country6
+
+select testData3.id, name, country from testData2 full outer join testData3 on testdata2.id = testData3.id
+1	name1	country1
+2	name2	country2
+3	name3	country3
+NULL	name5	NULL
+4	NULL	country4
+6	NULL	country6
+
+select coalesce(testData2.id, testData3.id) as id, name, country from testData2 full outer join testData3 on testData2.id = testData3.id
+1	name1	country1
+2	name2	country2
+3	name3	country3
+5	name5	NULL
+4	NULL	country4
+6	NULL	country6
+
+
+COALESCE(tbl1.id, tbl2.id): This function returns the first non-null value among its arguments. This ensures that the id column is populated with values from either tbl1 or tbl2.
+----------------------------------------------------------------------------------------
+
+return multiple table
+CREATE PROCEDURE GetTwoTables
+AS
+BEGIN
+    -- First result set
+    SELECT * FROM testData2;
+
+    -- Second result set
+    SELECT * FROM testData3;
+END
+GO
+
+-----------------------------------------------------------
+
+-- used to set unique column
+
+CREATE UNIQUE INDEX uidx_pid
+ON tablename (colname);

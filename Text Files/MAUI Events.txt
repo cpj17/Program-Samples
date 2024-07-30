@@ -1,0 +1,44 @@
+In .NET MAUI (Multi-platform App UI), the controls (elements like Entry, Button, Label, etc.) typically have events that you can handle to respond to user interactions or changes in the control state. Here's a list of common events available for some of the basic controls in .NET MAUI:
+
+Entry Control Events:
+TextChanged: Raised when the text in the Entry control changes.
+	1. Completed: Raised when the user completes the text input (e.g., presses Enter or moves focus away).
+
+Button Control Events:
+	1. Clicked: Raised when the Button control is clicked or tapped.
+
+Switch Control Events:
+	1. Toggled: Raised when the state of the Switch control changes (on/off).
+
+Slider Control Events:
+	1. ValueChanged: Raised when the value of the Slider control changes.
+
+Stepper Control Events:
+	1. ValueChanged: Raised when the value of the Stepper control changes.
+
+Picker Control Events:
+	1. SelectedIndexChanged: Raised when the selected index of the Picker control changes.
+
+Date and Time Picker Control Events:
+	1. DateSelected: Raised when a date is selected in the DatePicker control.
+	2. TimeSelected: Raised when a time is selected in the TimePicker control.
+
+WebView Control Events:
+	1. Navigating: Raised when the WebView control is navigating to a new URL.
+	2. Navigated: Raised when the WebView control has navigated to a new URL.
+
+ListView Control Events:
+	1. ItemTapped: Raised when an item in the ListView control is tapped.
+	2. ItemSelected: Raised when an item in the ListView control is selected.
+
+Gesture Recognizer Events:
+	1. Tapped: Raised when a tap gesture is recognized on a UI element.
+	2. Pinched: Raised when a pinch gesture is recognized on a UI element.
+	3. Swiped: Raised when a swipe gesture is recognized on a UI element.
+	4. Panned: Raised when a pan gesture is recognized on a UI element.
+	5. Rotated: Raised when a rotate gesture is recognized on a UI element.
+
+General Control Events:
+	1. Focused: Raised when a control receives focus.
+	2. Unfocused: Raised when a control loses focus.
+	3. PropertyChanged: A general event that can be used to monitor changes in properties of a control.
