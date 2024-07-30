@@ -1,0 +1,19 @@
+WITH NumberedRecords AS (
+    SELECT 
+        *,
+        ROW_NUMBER() OVER (ORDER BY question_id) AS rn
+    FROM feedback_question_table2
+)
+SELECT *
+FROM NumberedRecords
+WHERE rn BETWEEN 3 AND 5;
+
+
+SELECT *
+FROM (
+    SELECT 
+        *,
+        ROW_NUMBER() OVER (ORDER BY question_id) AS rn
+    FROM feedback_question_table2
+) AS NumberedRecords
+WHERE rn BETWEEN 3 AND 5;
