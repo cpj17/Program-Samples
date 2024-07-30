@@ -1,0 +1,43 @@
+<style>
+   .overlay {
+    position: fixed; /* Make the overlay cover the entire viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 999; /* Higher z-index to ensure it covers everything else */
+}
+
+.div-TrainingId {
+    height: 300px;
+    width: 300px;
+    background-color: cyan;
+    position: fixed; /* Fixed position to center it */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; /* Higher z-index than the overlay */
+}
+
+</style>
+
+<button onclick="showModal()">Show Modal</button>
+
+<div class="overlay" id="overlay" style="display:none;"></div>
+<div class="div-TrainingId" id="modal" style="display:none;">
+    <!-- Your content here -->
+    <button onclick="hideModal()">Close</button>
+</div>
+
+<script>
+function showModal() {
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('modal').style.display = 'block';
+}
+
+function hideModal() {
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('modal').style.display = 'none';
+}
+</script>
