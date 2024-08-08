@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+/* Sidebar styles */
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #f1f1f1;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+/* Sidebar links */
+.sidenav a {
+  display: block;
+  color: black;
+  padding: 16px;
+  text-decoration: none;
+  position: relative;
+  z-index: 1; /* Ensure links are on top */
+}
+
+/* Active link styles */
+.sidenav a.active {
+  background-color: #93000b;
+  color: white;
+}
+
+/* Hover styles for links */
+.sidenav a:hover:not(.active) {
+  background-color: #b3000c;
+  color: white;
+}
+
+/* Dropdown container */
+.sidenav .dropdown {
+  display: block; /* Ensure dropdown is treated as a block element */
+}
+
+/* Dropdown button styles */
+.sidenav .dropdown .dropbtn {
+  display: block;
+  color: black;
+  padding: 16px;
+  background-color: #f1f1f1;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 16px;
+  position: relative;
+  z-index: 1; /* Ensure button is on top */
+}
+
+/* Hover effect for dropdown button */
+.sidenav .dropdown:hover .dropbtn {
+  background-color: #b3000c;
+  color: white;
+}
+
+/* Dropdown content styles */
+.sidenav .dropdown-content {
+  display: none;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  width: 100%;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 2; /* Ensure dropdown content is on top */
+}
+
+/* Show dropdown content on hover */
+.sidenav .dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Styles for dropdown items */
+.sidenav .dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  background-color: #fefaf1;
+}
+
+/* Hover effect for dropdown items */
+.sidenav .dropdown-content a:hover {
+  background-color: #b3000c;
+  color: white;
+  font-weight: bolder;
+}
+
+/* Dropdown button arrow */
+.sidenav .dropdown .dropbtn::after {
+  content: '\25BC'; /* Down arrow */
+  font-size: 12px;
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+}
+
+/* Arrow rotation on hover */
+.sidenav .dropdown:hover .dropbtn::after {
+  content: '\25B2'; /* Up arrow */
+  transform: rotate(180deg);
+}
+
+/* Main content styles */
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 700px) {
+  .sidenav {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .sidenav a {float: left;}
+  #main {margin-left: 0;}
+}
+
+@media screen and (max-width: 400px) {
+  .sidenav a {
+    text-align: center;
+    float: none;
+  }
+}
+
+/* Close button styles */
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+</style>
+</head>
+<body>
+
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="eQuizControlPanel.aspx">Home</a>
+  <a runat="server" id="quesBank" href="QuestionBank.aspx">Question Bank</a>
+  <div class="dropdown">
+    <a href="javascript:void(0)" class="dropbtn">Groups</a>
+    <div class="dropdown-content">
+      <a href="javascript:void(0)">Groups</a>
+      <a href="javascript:void(0)">Users</a>
+      <a href="javascript:void(0)">Courses</a>
+    </div>
+  </div>
+  
+  <a href="javascript:void(0)">Questionnaire</a>
+  <a href="javascript:void(0)">Course</a>
+  <a href="javascript:void(0)">Re-Submission</a>
+</div>
+
+<div id="main">
+  <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
+  <h2>Content</h2>
+</div>
+
+<script>
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+  document.getElementById("main").style.marginLeft = "250px";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("main").style.marginLeft= "0";
+}
+</script>
+   
+</body>
+</html>
