@@ -1,0 +1,15 @@
+using System;
+
+public partial class ContentPage : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        // Access the label in the master page
+        var masterLabel = (Label)this.Master.FindControl("LblScreenTitle");
+        
+        if (masterLabel != null)
+        {
+            masterLabel.Text = "Updated Title from Content Page";
+        }
+    }
+}
