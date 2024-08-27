@@ -1,0 +1,5 @@
+SELECT * 
+FROM chr_t_userprofile
+ORDER BY empid asc 
+OFFSET 30 ROWS 
+FETCH NEXT 10 ROWS ONLY;

@@ -1,0 +1,58 @@
+DECLARE @prevId VARCHAR(255);
+DECLARE @newId INT;
+DECLARE @newIdFull VARCHAR(255);
+DECLARE @numLength INT = 5;  -- Define the length of the numeric part
+
+-- Get the maximum Ques_Id from the table
+SELECT @prevId = MAX(Ques_Id) FROM Trg_S_FeedbackQuest;
+
+-- Determine the new ID value based on the current year
+IF (SUBSTRING(@prevId, 3, 4) <> CAST(YEAR(GETDATE()) AS VARCHAR(4)))
+BEGIN
+    SET @newId = 1;
+END
+ELSE
+BEGIN
+    SET @newId = CAST(SUBSTRING(@prevId, 7, @numLength) AS INT) + 1;
+END
+
+-- Generate the new ID with leading zeros
+SET @newIdFull = 'QS' + CAST(YEAR(GETDATE()) AS VARCHAR(4)) + 
+                 RIGHT(REPLICATE('0', @numLength) + CAST(@newId AS VARCHAR(10)), @numLength);
+
+-- Output the new ID
+SELECT @newIdFull;
+
+
+-- Method 2
+
+-- Get the maximum Ques_Id for the current year
+WITH MaxIdCTE AS (
+    SELECT MAX(Ques_Id) AS MaxQuesId
+    FROM Trg_S_FeedbackQuest
+    WHERE SUBSTRING(Ques_Id, 3, 4) = CAST(YEAR(GETDATE()) AS VARCHAR(4))
+)
+
+-- Generate the new Ques_Id
+SELECT 
+    'QS' + CAST(YEAR(GETDATE()) AS VARCHAR(4)) + 
+    RIGHT('00000' + 
+          CAST(
+              ISNULL(
+                  CAST(SUBSTRING(MaxQuesId, 7, 5) AS INT) + 1,
+                  1
+              ) AS VARCHAR(5)
+          ), 
+          5
+    ) AS NewQues_Id
+FROM MaxIdCTE
+
+UNION ALL
+
+-- Handle the case where no IDs exist for the current year
+SELECT 
+    'QS' + CAST(YEAR(GETDATE()) AS VARCHAR(4)) + '00001'
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM MaxIdCTE
+);
