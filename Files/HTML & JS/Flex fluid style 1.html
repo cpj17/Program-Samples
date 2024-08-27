@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Flexbox</title>
+    <style>
+        .flex-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap; /* Allows flex items to wrap to new lines */
+            padding: 30px;
+        }
+
+        .divStats {
+            display: flex; /* Enable Flexbox on child divs */
+            flex-direction: column; /* Stack children vertically */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            height: 200px;
+            width: 260px;
+            background-color: cyan;
+            border-radius: 40px;
+            margin: 10px; /* Adds space around each div */
+            transition: filter 0.3s ease; /* Smooth transition */
+        }
+
+        .divStats:hover {
+            filter: brightness(80%); /* Darkens the color on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="flex-container">
+        <div class="divStats" style="background-color: #3381c3;">
+            <h1>Groups</h1>
+            <h2> 0 </h2>
+        </div>
+        <div class="divStats" style="background-color: #00b595;">
+            <h1>Groups</h1>
+            <h2> 0 </h2>
+        </div>
+        <div class="divStats" style="background-color: #ef5267;">
+            <h1>Groups</h1>
+            <h2> 0 </h2>
+        </div>
+    </div>
+</body>
+</html>

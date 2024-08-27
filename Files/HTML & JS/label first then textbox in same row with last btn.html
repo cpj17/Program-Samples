@@ -1,0 +1,60 @@
+<label class="stepContentLabel">Group Name</label>
+<div style="display: flex; flex-direction: row; gap: 10px;">
+    <!-- DropDownList -->
+    <select id="DdlUserGroupId" class="form-control">
+        <!-- Options will be added dynamically or statically here -->
+        <option value="G1">Group 1</option>
+        <option value="G2">Group 2</option>
+        <option value="G3">Group 3</option>
+        <!-- Add more options as needed -->
+    </select>
+    
+    <!-- Load Users Button -->
+    <button type="button" id="BtnLoaduserForGroups" class="button" style="background-color: green; color: white;" onclick="loadUsers()">Load Users</button>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <!-- Employee ID -->
+        <div style="display: flex; flex-direction: column; flex: 1; margin-right: 10px;">
+            <label class="stepContentLabel">Emp. ID</label>
+            <input type="search" id="TxtSearchEmpId" class="form-control" style="width: 100%;" onkeydown="return enterClickUserSearch(event)" />
+        </div>
+        
+        <!-- Employee Name -->
+        <div style="display: flex; flex-direction: column; flex: 1; margin-right: 10px;">
+            <label class="stepContentLabel">Emp. Name</label>
+            <input type="search" id="TxtSearchEmpName" class="form-control" style="width: 100%;" onkeydown="return enterClickUserSearch(event)" />
+        </div>
+        
+        <!-- Employee Role -->
+        <div style="display: flex; flex-direction: column; flex: 1; margin-right: 10px;">
+            <label class="stepContentLabel">Emp. Role</label>
+            <input type="search" id="TxtSearchEmpDesig" class="form-control" style="width: 100%;" onkeydown="return enterClickUserSearch(event)" />
+        </div>
+        
+        <!-- Employee Department -->
+        <div style="display: flex; flex-direction: column; flex: 1; margin-right: 10px;">
+            <label class="stepContentLabel">Emp. Department</label>
+            <input type="search" id="TxtSearchEmpDept" class="form-control" style="width: 100%;" onkeydown="return enterClickUserSearch(event)" />
+        </div>
+        
+        <!-- Search Button -->
+        <div style="display: flex; align-items: center; margin-top: 20px;">
+            <button type="button" id="BtnSearchUser" class="button" style="height: 100%; background-color: blue; color: white;" onclick="handleSearchClick()">Search</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function enterClickUserSearch(event) {
+        if (event.key === 'Enter') {
+            // Your existing search logic here
+            return false; // Prevent default action if needed
+        }
+    }
+
+    function handleSearchClick() {
+        // Your existing button click logic here
+    }
+</script>
