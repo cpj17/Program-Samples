@@ -1,0 +1,71 @@
+<asp:GridView ID="GvQuestion" runat="server" AutoGenerateColumns="False" Enabled="false" BackColor="White" BorderColor="#CC9966" BorderStyle="None" BorderWidth="1px" CellPadding="4" Width="100%" OnRowDataBound="GvQuestion_RowDataBound">
+                                    <FooterStyle BackColor="#FFFFCC" ForeColor="#330099" />
+                                    <HeaderStyle BackColor="#990000" Font-Bold="True" ForeColor="#FFFFCC" />
+                                    <PagerStyle BackColor="#FFFFCC" ForeColor="#330099" HorizontalAlign="Center" />
+                                    <RowStyle BackColor="White" ForeColor="#330099" />
+                                    <SortedAscendingCellStyle BackColor="#FEFCEB" />
+                                    <SortedAscendingHeaderStyle BackColor="#AF0101" />
+                                    <SortedDescendingCellStyle BackColor="#F6F0C0" />
+                                    <SortedDescendingHeaderStyle BackColor="#7E0000" />
+
+                                    <Columns>
+                                        <asp:TemplateField Visible="false">
+                                            <ItemTemplate>
+                                                <asp:Label runat="server" ID="LblRowID" Text='<%# Bind("Ques_Id") %>' CssClass="form-control"></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="S.No">
+                                            <ItemTemplate>
+                                                <asp:Label ID="LblSerialNumber" runat="server" Text='<%# (Container.DataItemIndex + 1) + "." %>' ></asp:Label>
+                                            </ItemTemplate>
+                                            <ItemStyle Width="50px" />
+                                        </asp:TemplateField>
+                                        <asp:TemplateField>
+                                            <ItemTemplate>
+                                                <asp:TextBox runat="server" ID="TxtQuestion" ToolTip="Question" OnTextChanged="gvTextBox_TextChanged" Text='<%# Bind("Ques_Descr") %>' CssClass="form-control"></asp:TextBox>
+                                            </ItemTemplate>
+                                            <HeaderTemplate>
+                                                <asp:Label runat="server" ID="LblQuestions" Text="Question"></asp:Label>
+                                            </HeaderTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField>
+                                            <ItemTemplate>
+                                                <asp:DropDownList runat="server" ID="DdlIsRequired" ToolTip="Is Required" OnSelectedIndexChanged="DdlIsRequired_SelectedIndexChanged" CssClass="form-control">
+                                                    <asp:ListItem Text="Yes" Value="Y"></asp:ListItem>
+                                                    <asp:ListItem Text="Optional" Value="N"></asp:ListItem>
+                                                </asp:DropDownList>
+                                            </ItemTemplate>
+                                            <HeaderTemplate>
+                                                <asp:Label runat="server" ID="LblIsRequired" Text="Is Required"></asp:Label>
+                                            </HeaderTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField>
+                                            <ItemTemplate>
+                                                <asp:DropDownList runat="server" ID="DdlAnswerType" ToolTip="Answer Type" OnSelectedIndexChanged="DdlAnswerType_SelectedIndexChanged" CssClass="form-control">
+                                                    <asp:ListItem Text="Single Line" Value="SINGLE"></asp:ListItem>
+                                                    <asp:ListItem Text="Multi Line" Value="MULTI"></asp:ListItem>
+                                                </asp:DropDownList>
+                                            </ItemTemplate>
+                                            <HeaderTemplate>
+                                                <asp:Label runat="server" ID="LblAnswerType" Text="Answer Type"></asp:Label>
+                                            </HeaderTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField>
+                                        <ItemTemplate>
+                                            <asp:Label runat="server" ID="LblEffectiveDate" ToolTip="Question" OnTextChanged="gvTextBox_TextChanged" Text='<%# Convert.ToDateTime(Eval("Efft_Date")).ToString("yyyy-MM-dd") %>'></asp:Label>
+                                        </ItemTemplate>
+                                        <HeaderTemplate>
+                                            <asp:Label runat="server" ID="LblEffectiveDate1" Text="Effective Date"></asp:Label>
+                                        </HeaderTemplate>
+                                    </asp:TemplateField>
+                                        <asp:TemplateField>
+                                            <ItemTemplate>
+                                                <asp:CheckBox runat="server" ID="ChkBoxReuse" Enabled="false" OnCheckedChanged="ChkBoxReuse_CheckedChanged" AutoPostBack="true" CssClass="form-control" />
+                                            </ItemTemplate>
+                                            <HeaderTemplate>
+                                                <asp:CheckBox Text="Re-Use" ID="ChkBoxCheckAllReUse" OnCheckedChanged="ChkBoxCheckAllReUse_CheckedChanged" runat="server" AutoPostBack="true" />
+                                            </HeaderTemplate>
+                                        </asp:TemplateField>
+                                    </Columns>
+
+                                </asp:GridView>
