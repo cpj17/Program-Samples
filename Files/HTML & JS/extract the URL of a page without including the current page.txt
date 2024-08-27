@@ -1,0 +1,18 @@
+To extract the URL of a page without including the current page name in JavaScript, you can use the window.location object. Here’s a step-by-step guide to achieve this:
+
+Get the Full URL: Use window.location.href to get the full URL of the current page.
+
+Extract the Base URL: Use a combination of window.location.protocol, window.location.host, and window.location.pathname to construct the base URL without the current page name.
+
+// Get the current URL
+const fullUrl = window.location.href;
+
+// Extract protocol and host
+const protocol = window.location.protocol;
+const host = window.location.host;
+
+// Extract pathname and remove the current page name
+const pathname = window.location.pathname;
+const baseUrl = protocol + '//' + host + pathname.substring(0, pathname.lastIndexOf('/') + 1);
+
+console.log(baseUrl);
