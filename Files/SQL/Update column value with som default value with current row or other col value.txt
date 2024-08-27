@@ -1,0 +1,55 @@
+-- below is not working in bulkcopy normal insert query only working sampl code in below
+-- sample query if the question id update while insert in db side (verified working)
+
+--i have a one table that has following columns id, name, rollno, descand pkey. here id default value is identity step 1 and pkey default values is current year with current row number
+
+--for the above condition give me create table query
+
+-- csharp code
+--string stringQury = "INSERT INTO MyTable (name, rollno, [desc]) VALUES ";
+--for (int i = 0; i < dataTable.Rows.Count; i++)
+--{
+--    stringQury += "('" + dataTable.Rows[i]["name"].ToString() + "', " + dataTable.Rows[i]["rollno"].ToString() + ", '" + dataTable.Rows[i]["desc"].ToString() + "')";
+--    stringQury += i == dataTable.Rows.Count - 1 ? ";" : ",";
+--}
+
+
+CREATE TABLE MyTable (
+    id INT IDENTITY(1,1) PRIMARY KEY,  -- Identity column
+    name NVARCHAR(255),
+    rollno INT,
+    [desc] NVARCHAR(255),
+    pkey NVARCHAR(20) DEFAULT NULL  -- pkey column with a placeholder default
+);
+
+
+CREATE TRIGGER trg_SetPkey
+ON MyTable
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Update the pkey column with the current year and zero-padded row number
+    UPDATE MyTable
+    SET pkey = CONCAT(
+        YEAR(GETDATE()), '-', 
+        RIGHT('0' + CAST(MyTable.id AS VARCHAR(10)), 2)  -- Zero-padding the row number
+    )
+    FROM MyTable
+    INNER JOIN inserted ON MyTable.id = inserted.id;
+END;
+
+
+-- Inserting sample data
+INSERT INTO MyTable (name, rollno, [desc])
+VALUES ('John Doe', 101, 'Sample description for John Doe');
+
+INSERT INTO MyTable (name, rollno, [desc])
+VALUES ('Jane Smith', 102, 'Sample description for Jane Smith');
+
+INSERT INTO MyTable (name, rollno, [desc])
+VALUES ('Alice Johnson', 103, 'Sample description for Alice Johnson');
+
+
+-------------------------------------------------------------
