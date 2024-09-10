@@ -1,0 +1,249 @@
+
+<style>
+    body {
+        background-color: #f0f0f0;
+        margin: 0; /* Remove default margin for body */
+        padding: 0; /* Remove default padding for body */
+    }
+
+    .info {
+        margin-bottom: 10px;
+        font-size: 18px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap; 
+        padding: 10px;
+        width: 100%;
+        position: fixed;
+        background-color: lightgray;
+        z-index: 999;
+    }
+
+    #restartButton {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .flex-container {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap; /* Allows flex items to wrap to new lines */
+        padding: 30px;
+        margin-top: 5px; /* Add space for the fixed info div */
+    }
+
+    .card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 90px;
+        width: 90px;
+        border-radius: 8px;
+        margin: 10px;
+        transition: transform 0.6s ease, filter 0.3s ease;
+        cursor: pointer;
+        color: black;
+        font-weight: bolder;
+        background-color: #fff;
+        border: 2px solid #ccc;
+        perspective: 1000px; /* Create a perspective for the 3D effect */
+        position: relative;
+        font-size: calc(4.5rem + 1vw);
+        font-size: min(4rem, calc(4.5rem + 1vw)); /* Cap the font size at 4rem */
+    }
+
+    .card-inner {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        transition: transform 0.6s ease; /* Smooth flip transition */
+        transform-style: preserve-3d; /* Preserve 3D transforms */
+        transform: rotateY(0deg); /* Default: show back */
+    }
+
+    .card-front, .card-back {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        backface-visibility: hidden; /* Hide the back face when flipped */
+    }
+
+    .card-front {
+        background-color: #fff;
+        z-index: 2; /* Front face on top */
+        transform: rotateY(180deg); /* Hide front face initially */
+    }
+
+    .card-back {
+        background-color: #f9f9f9;
+        /* Optionally add some content or styling to show it's face-down */
+    }
+
+    .card.flipped .card-inner {
+        transform: rotateY(180deg); /* Flip the card to show the front */
+    }
+
+    .card:hover {
+        filter: brightness(80%);
+        border-radius: 15px;
+    }
+
+    .card.flipped {
+        background-color: #f9f9f9; /* Optional: adjust background when flipped */
+    }
+
+    .card-front.matched {
+        background-color: #8f8;
+        cursor: not-allowed;
+    }
+</style>
+
+<div class="info">
+    <div>Time: <span id="timer">0</span>s</div>
+    <div>Moves: <span id="moves">0</span></div>
+    <div> <span id="restartButton">Restart</span> </div>
+</div>
+
+<center>
+    <br />
+    <div class="flex-container" id="gameBoard">
+    </div>
+</center>
+
+<script>
+    const board = document.getElementById('gameBoard');
+    const timerDisplay = document.getElementById('timer');
+    const movesDisplay = document.getElementById('moves');
+    const restartButton = document.getElementById('restartButton');
+
+    const letters = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i)); // A-Z
+    const digits = Array.from({ length: 10 }, (_, i) => i.toString()); // 0-9
+    const cardValues = [...letters, ...digits];
+    let cards = [...cardValues, ...cardValues];
+    cards = cards.sort(() => Math.random() - 0.5);
+
+    let firstCard = null;
+    let secondCard = null;
+    let lockBoard = false;
+    let moves = 0;
+    let seconds = 0;
+    let timerInterval = null;
+
+    function createCard(value) {
+        const card = document.createElement('div');
+        card.classList.add('card');
+
+        // Create card inner element
+        const cardInner = document.createElement('div');
+        cardInner.classList.add('card-inner');
+
+        // Create front and back faces
+        const cardFront = document.createElement('div');
+        cardFront.classList.add('card-front');
+        cardFront.textContent = value; // Set the card value
+
+        const cardBack = document.createElement('div');
+        cardBack.classList.add('card-back');
+
+        // Append front and back to card inner
+        cardInner.appendChild(cardFront);
+        cardInner.appendChild(cardBack);
+
+        // Append card inner to card
+        card.appendChild(cardInner);
+
+        card.dataset.value = value;
+        card.addEventListener('click', flipCard);
+
+        return card;
+    }
+
+    function initializeBoard() {
+        board.innerHTML = ''; // Clear the board
+        cards.forEach(value => {
+            const card = createCard(value);
+            board.appendChild(card);
+        });
+        startTimer();
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            seconds++;
+            timerDisplay.textContent = seconds;
+        }, 1000);
+    }
+
+    function stopTimer() {
+        clearInterval(timerInterval);
+    }
+
+    function flipCard() {
+        if (lockBoard || this === firstCard || this.classList.contains('flipped')) return;
+        this.classList.add('flipped');
+
+        if (!firstCard) {
+            firstCard = this;
+            return;
+        }
+
+        secondCard = this;
+        moves++;
+        movesDisplay.textContent = moves;
+        checkForMatch();
+    }
+
+    function checkForMatch() {
+        const isMatch = firstCard.dataset.value === secondCard.dataset.value;
+        if (isMatch) {
+            disableCards();
+        } else {
+            unflipCards();
+        }
+    }
+
+    function disableCards() {
+		// Add the 'matched' class to the card-front element of each matched card
+		firstCard.querySelector('.card-front').classList.add('matched');
+		secondCard.querySelector('.card-front').classList.add('matched');
+
+		// Reset the board after a short delay to allow user to see the matched cards
+		setTimeout(resetBoard, 500); // Adjust the delay if necessary
+	}
+
+    function unflipCards() {
+        lockBoard = true;
+        setTimeout(() => {
+            firstCard.classList.remove('flipped');
+            secondCard.classList.remove('flipped');
+            resetBoard();
+        }, 1000);
+    }
+
+    function resetBoard() {
+        [firstCard, secondCard] = [null, null];
+        lockBoard = false;
+    }
+
+    function restartGame() {
+        cards = [...cardValues, ...cardValues];
+        cards = cards.sort(() => Math.random() - 0.5);
+        initializeBoard();
+        moves = 0;
+        seconds = 0;
+        movesDisplay.textContent = moves;
+        timerDisplay.textContent = seconds;
+        stopTimer();
+        startTimer();
+    }
+
+    restartButton.addEventListener('click', restartGame);
+
+    initializeBoard();
+</script>

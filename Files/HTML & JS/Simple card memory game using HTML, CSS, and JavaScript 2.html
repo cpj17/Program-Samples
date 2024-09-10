@@ -1,0 +1,195 @@
+<style>
+   body {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100vh;
+		margin: 0;
+		background-color: #f0f0f0;
+	}
+
+	.game-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.grid-container {
+		display: grid;
+		grid-template-columns: repeat(4, 100px);
+		grid-template-rows: repeat(4, 100px);
+		gap: 10px;
+	}
+
+	.card {
+		width: 100px;
+		height: 100px;
+		background-color: #fff;
+		border: 1px solid #ccc;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 24px;
+		color: #333;
+		cursor: pointer;
+		position: relative;
+		transition: background-color 0.3s;
+	}
+
+	.card.flipped {
+		background-color: #f9f9f9;
+	}
+
+	.card.matched {
+		background-color: #8f8;
+		cursor: default;
+	}
+	
+	.info {
+		margin-bottom: 10px;
+		font-size: 18px;
+	}
+
+	#restartButton {
+		margin-top: 20px;
+		padding: 10px 20px;
+		font-size: 16px;
+		cursor: pointer;
+	}
+
+
+</style>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="info">
+            <div>Time: <span id="timer">0</span>s</div>
+            <div>Moves: <span id="moves">0</span></div>
+        </div>
+        <div class="grid-container" id="gameBoard"></div>
+        <button id="restartButton">Restart</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+<script>
+	const board = document.getElementById('gameBoard');
+	const timerDisplay = document.getElementById('timer');
+	const movesDisplay = document.getElementById('moves');
+	const restartButton = document.getElementById('restartButton');
+
+	const cardValues = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+	let cards = [...cardValues, ...cardValues];
+	cards = cards.sort(() => Math.random() - 0.5);
+
+	let firstCard = null;
+	let secondCard = null;
+	let lockBoard = false;
+	let moves = 0;
+	let seconds = 0;
+	let timerInterval = null;
+
+	function createCard(value) {
+		const card = document.createElement('div');
+		card.classList.add('card');
+		card.dataset.value = value;
+		card.addEventListener('click', flipCard);
+		return card;
+	}
+
+	function initializeBoard() {
+		cards.forEach(value => {
+			const card = createCard(value);
+			board.appendChild(card);
+		});
+		startTimer();
+	}
+
+	function startTimer() {
+		timerInterval = setInterval(() => {
+			seconds++;
+			timerDisplay.textContent = seconds;
+		}, 1000);
+	}
+
+	function stopTimer() {
+		clearInterval(timerInterval);
+	}
+
+	function flipCard() {
+		if (lockBoard || this === firstCard) return;
+		this.classList.add('flipped');
+		this.textContent = this.dataset.value;
+
+		if (!firstCard) {
+			firstCard = this;
+			return;
+		}
+
+		secondCard = this;
+		moves++;
+		movesDisplay.textContent = moves;
+		checkForMatch();
+	}
+
+	function checkForMatch() {
+		const isMatch = firstCard.dataset.value === secondCard.dataset.value;
+		if (isMatch) {
+			disableCards();
+		} else {
+			unflipCards();
+		}
+	}
+
+	function disableCards() {
+		firstCard.classList.add('matched');
+		secondCard.classList.add('matched');
+		resetBoard();
+	}
+
+	function unflipCards() {
+		lockBoard = true;
+		setTimeout(() => {
+			firstCard.classList.remove('flipped');
+			secondCard.classList.remove('flipped');
+			firstCard.textContent = '';
+			secondCard.textContent = '';
+			resetBoard();
+		}, 1000);
+	}
+
+	function resetBoard() {
+		[firstCard, secondCard] = [null, null];
+		lockBoard = false;
+	}
+
+	function restartGame() {
+		board.innerHTML = '';
+		cards = [...cardValues, ...cardValues];
+		cards = cards.sort(() => Math.random() - 0.5);
+		initializeBoard();
+		moves = 0;
+		seconds = 0;
+		movesDisplay.textContent = moves;
+		timerDisplay.textContent = seconds;
+		stopTimer();
+		startTimer();
+	}
+
+	restartButton.addEventListener('click', restartGame);
+
+	initializeBoard();
+
+
+</script>

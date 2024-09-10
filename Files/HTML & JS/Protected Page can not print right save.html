@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protected Page</title>
+    <style>
+        /* Disable text selection */
+        body {
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none;    /* Firefox */
+            -ms-user-select: none;     /* IE10+/Edge */
+            user-select: none;         /* Standard */
+        }
+
+        /* Prevent printing */
+        @media print {
+            body {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Protected Content</h1>
+    <p>This content is protected from printing, text selection, and right-click context menu.</p>
+
+    <script>
+        // Disable right-click context menu
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Disable specific keyboard shortcuts (Ctrl+P, Ctrl+S, Ctrl+U)
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === 'p' || e.key === 's' || e.key === 'u')) {
+                e.preventDefault();
+            }
+        });
+
+        // Prevent text selection using JavaScript
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect Four</title>
+    <link rel="stylesheet" href="styles.css">
+	<style>
+	    body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(7, 50px);
+    grid-template-rows: repeat(6, 50px);
+    gap: 5px;
+}
+
+.cell {
+    width: 50px;
+    height: 50px;
+    background-color: #eee;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cell.red {
+    background-color: red;
+}
+
+.cell.yellow {
+    background-color: yellow;
+}
+
+#reset-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+	</style>
+</head>
+<body>
+    <h1>Connect Four</h1>
+    <div id="game-board"></div>
+    <button id="reset-button">Reset Game</button>
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+<script>
+    const columns = 7;
+const rows = 6;
+const board = Array.from(Array(rows), () => Array(columns).fill(null));
+let currentPlayer = 'red';
+
+const createBoard = () => {
+    const gameBoard = document.getElementById('game-board');
+    gameBoard.innerHTML = '';
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < columns; c++) {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.dataset.row = r;
+            cell.dataset.col = c;
+            gameBoard.appendChild(cell);
+        }
+    }
+};
+
+const checkWinner = () => {
+    const checkDirection = (row, col, dr, dc) => {
+        let count = 0;
+        let r = row;
+        let c = col;
+        while (r >= 0 && r < rows && c >= 0 && c < columns && board[r][c] === currentPlayer) {
+            count++;
+            r += dr;
+            c += dc;
+        }
+        return count;
+    };
+
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < columns; c++) {
+            if (board[r][c] === currentPlayer) {
+                if (checkDirection(r, c, 1, 0) + checkDirection(r, c, -1, 0) - 1 >= 4 ||
+                    checkDirection(r, c, 0, 1) + checkDirection(r, c, 0, -1) - 1 >= 4 ||
+                    checkDirection(r, c, 1, 1) + checkDirection(r, c, -1, -1) - 1 >= 4 ||
+                    checkDirection(r, c, 1, -1) + checkDirection(r, c, -1, 1) - 1 >= 4) {
+                    return currentPlayer;
+                }
+            }
+        }
+    }
+    return null;
+};
+
+const handleClick = (event) => {
+    if (!event.target.classList.contains('cell')) return;
+
+    const col = parseInt(event.target.dataset.col);
+    for (let row = rows - 1; row >= 0; row--) {
+        if (!board[row][col]) {
+            board[row][col] = currentPlayer;
+            const cell = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+            cell.classList.add(currentPlayer);
+            if (checkWinner()) {
+                setTimeout(() => alert(`${currentPlayer.toUpperCase()} Wins!`), 100);
+                return;
+            }
+            currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
+            break;
+        }
+    }
+};
+
+const resetGame = () => {
+    board.forEach(row => row.fill(null));
+    currentPlayer = 'red';
+    document.querySelectorAll('.cell').forEach(cell => cell.classList.remove('red', 'yellow'));
+};
+
+createBoard();
+document.getElementById('game-board').addEventListener('click', handleClick);
+document.getElementById('reset-button').addEventListener('click', resetGame);
+
+</script>

@@ -1,0 +1,191 @@
+<style>
+    body {
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+    }
+
+    .info {
+        margin-bottom: 10px;
+        font-size: 18px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 10px;
+        width: 100%;
+        position: fixed;
+        background-color: lightgray;
+		z-index: 999;
+    }
+
+    #restartButton {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border: 2px solid black
+    }
+
+    .flex-container {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap; /* Allows flex items to wrap to new lines */
+        padding: 30px;
+    }
+
+    .card {
+        display: flex; /* Enable Flexbox on child divs */
+        flex-direction: column; /* Stack children vertically */
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        height: 200px;
+        width: 260px;
+        border-radius: 40px;
+        margin: 10px; /* Adds space around each div */
+        transition: filter 0.3s ease; /* Smooth transition */
+        cursor: pointer;
+        color: black;
+        font-weight: bolder;
+        background-color: #fff;
+        border: 2px solid #ccc;
+        font-size: calc(4.5rem + 1vw);
+        font-size: min(4rem, calc(4.5rem + 1vw)); /* Cap the font size at 4rem */
+    }
+
+        .card:hover {
+            filter: brightness(80%);
+            border-radius: 35px;
+        }
+
+        .card.flipped {
+            background-color: #f9f9f9;
+        }
+
+        .card.matched {
+            background-color: #8f8;
+            cursor: default;
+        }
+</style>
+
+<div class="info">
+    <div>Time: <span id="timer">0</span>s</div>
+    <div>Moves: <span id="moves">0</span></div>
+    <div> <span id="restartButton">Restart</span> </div>
+</div>
+
+<center>
+    <br />
+    <div class="flex-container" id="gameBoard">
+    </div>
+</center>
+
+<script>
+    const board = document.getElementById('gameBoard');
+    const timerDisplay = document.getElementById('timer');
+    const movesDisplay = document.getElementById('moves');
+    const restartButton = document.getElementById('restartButton');
+
+    const letters = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i)); // A-Z
+    const digits = Array.from({ length: 10 }, (_, i) => i.toString()); // 0-9
+    const cardValues = [...letters, ...digits];
+    let cards = [...cardValues, ...cardValues];
+    cards = cards.sort(() => Math.random() - 0.5);
+
+    let firstCard = null;
+    let secondCard = null;
+    let lockBoard = false;
+    let moves = 0;
+    let seconds = 0;
+    let timerInterval = null;
+
+    function createCard(value) {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.dataset.value = value;
+        card.addEventListener('click', flipCard);
+        return card;
+    }
+
+    function initializeBoard() {
+        board.innerHTML = ''; // Clear the board
+        cards.forEach(value => {
+            const card = createCard(value);
+            board.appendChild(card);
+        });
+        startTimer();
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            seconds++;
+            timerDisplay.textContent = seconds;
+        }, 1000);
+    }
+
+    function stopTimer() {
+        clearInterval(timerInterval);
+    }
+
+    function flipCard() {
+        if (lockBoard || this === firstCard) return;
+        this.classList.add('flipped');
+        this.textContent = this.dataset.value;
+
+        if (!firstCard) {
+            firstCard = this;
+            return;
+        }
+
+        secondCard = this;
+        moves++;
+        movesDisplay.textContent = moves;
+        checkForMatch();
+    }
+
+    function checkForMatch() {
+        const isMatch = firstCard.dataset.value === secondCard.dataset.value;
+        if (isMatch) {
+            disableCards();
+        } else {
+            unflipCards();
+        }
+    }
+
+    function disableCards() {
+        firstCard.classList.add('matched');
+        secondCard.classList.add('matched');
+        resetBoard();
+    }
+
+    function unflipCards() {
+        lockBoard = true;
+        setTimeout(() => {
+            firstCard.classList.remove('flipped');
+            secondCard.classList.remove('flipped');
+            firstCard.textContent = '';
+            secondCard.textContent = '';
+            resetBoard();
+        }, 1000);
+    }
+
+    function resetBoard() {
+        [firstCard, secondCard] = [null, null];
+        lockBoard = false;
+    }
+
+    function restartGame() {
+        cards = [...cardValues, ...cardValues];
+        cards = cards.sort(() => Math.random() - 0.5);
+        initializeBoard();
+        moves = 0;
+        seconds = 0;
+        movesDisplay.textContent = moves;
+        timerDisplay.textContent = seconds;
+        stopTimer();
+        startTimer();
+    }
+
+    restartButton.addEventListener('click', restartGame);
+
+    initializeBoard();
+</script>
