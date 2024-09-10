@@ -1,0 +1,4 @@
+int[] array = { 0, 1, 2, 3 };  //List of 4 integers.
+var rng = new Random();
+
+var shuffledArray = array.OrderBy(e => rng.NextDouble()).ToArray();
