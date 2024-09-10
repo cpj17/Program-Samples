@@ -1,0 +1,10 @@
+TextBox objTextBox = (TextBox)sender;
+GridViewRow gvRow = (GridViewRow)objTextBox.NamingContainer;
+
+string stringValue = objTextBox.Text;
+int intIndex = gvRow.RowIndex;
+
+string stringViewStateKey = stringArrayGridView_ViewStateKeys[Array.IndexOf(objGridViewIDs, ((GridView)gvRow.NamingContainer))];
+string str = ((GridView)gvRow.NamingContainer).ID;
+
+int n = Array.IndexOf(objGridViewIDs, ((GridView)gvRow.NamingContainer));
