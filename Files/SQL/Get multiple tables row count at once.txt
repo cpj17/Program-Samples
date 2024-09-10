@@ -1,0 +1,7 @@
+SELECT 'Groups' AS table_name, COUNT(*) AS row_count FROM eq_groups
+UNION ALL
+SELECT 'Courses' AS table_name, COUNT(*) AS row_count FROM eq_courses
+UNION ALL
+SELECT 'Questionnaires' AS table_name, COUNT(*) AS row_count FROM eq_questionnaire
+UNION ALL
+SELECT 'Questions' AS table_name, COUNT(*) AS row_count FROM eq_question_bank;
