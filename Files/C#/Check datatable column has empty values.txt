@@ -1,0 +1,16 @@
+if (objDataTable.AsEnumerable().Where(row => row["UnitTitle"] == DBNull.Value || row["UnitType"] == DBNull.Value || row["Id"] == DBNull.Value || row["Description"] == DBNull.Value).Count() > 0)
+{
+    objCommonFunctions.ShowAlertMessage("Fill all required fields");
+    return;
+}
+
+//method 2
+
+string[] requiredColumns = { "UnitTitle", "UnitType", "Id", "Description" };
+
+if (objDataTable.AsEnumerable().Any(row => 
+    requiredColumns.Any(column => row[column] == DBNull.Value || string.IsNullOrEmpty(row[column].ToString()))))
+{
+    objCommonFunctions.ShowAlertMessage("Fill all required fields");
+    return;
+}
