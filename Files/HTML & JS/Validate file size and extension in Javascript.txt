@@ -1,0 +1,58 @@
+function validateFiles(input) {
+    document.getElementById("ContentPlaceHolder1_BtnTriggerServerSideFunction").click()
+
+    const maxFileSize = 5 * 1024 * 1024; // 5 MB in bytes
+    const validExtensions = ['.pdf', '.mp4'];
+    var stringErrMsg = ""
+
+    const files = input.files;
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const fileName = file.name.toLowerCase();
+        const fileSize = file.size;
+
+        // Check file extension
+        const isValidExtension = validExtensions.some(ext => fileName.endsWith(ext));
+        if (!isValidExtension) {
+            stringErrMsg += `${fileName} is not a valid file type. Only PDF and MP4 files are allowed.<br>`;
+            continue; // Skip to the next file
+        }
+
+        // Check file size
+        if (fileSize > maxFileSize) {
+            stringErrMsg += `${fileName} exceeds the maximum size of 5 MB.<br>`;
+            continue; // Skip to the next file
+        }
+    }
+    if (stringErrMsg.length > 0)
+        alert(stringErrMsg)
+}
+
+method 2
+
+<script type="text/javascript">
+    function validateFiles(input) {
+        const allowedExtensions = /(\.pdf|\.mp4)$/i;
+        const maxSize = 5 * 1024 * 1024; // 5 MB
+        let totalSize = 0;
+
+        for (let i = 0; i < input.files.length; i++) {
+            const file = input.files[i];
+
+            // Validate file type
+            if (!allowedExtensions.exec(file.name)) {
+                alert("Invalid file type: " + file.name + ". Only PDF and MP4 files are allowed.");
+                input.value = ""; // Clear the input
+                return;
+            }
+
+            // Validate file size
+            totalSize += file.size;
+            if (totalSize > maxSize) {
+                alert("Total file size exceeds 5 MB. Please upload smaller files.");
+                input.value = ""; // Clear the input
+                return;
+            }
+        }
+    }
+</script>

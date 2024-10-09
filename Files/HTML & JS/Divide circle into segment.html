@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divide Circle</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .circle {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, white 50%, transparent 50%);
+            border: 2px solid black;
+            overflow: hidden;
+        }
+        .segment {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            clip-path: polygon(50% 50%, 100% 0, 100% 100%);
+            background: lightblue;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="number" id="numSegments" min="1" placeholder="Enter number of segments">
+        <button onclick="drawCircle()">Divide Circle</button>
+        <div id="circle" class="circle"></div>
+    </div>
+    <script>
+        function drawCircle() {
+            const numSegments = parseInt(document.getElementById('numSegments').value);
+            const circle = document.getElementById('circle');
+            circle.innerHTML = ''; // Clear previous segments
+
+            if (numSegments < 1) return; // Avoid invalid input
+
+            const angle = 360 / numSegments;
+            for (let i = 0; i < numSegments; i++) {
+                const segment = document.createElement('div');
+                segment.className = 'segment';
+                segment.style.transform = `rotate(${i * angle}deg)`;
+                segment.style.background = `hsl(${i * (360 / numSegments)}, 70%, 80%)`; // Different colors for each segment
+                circle.appendChild(segment);
+            }
+        }
+    </script>
+</body>
+</html>

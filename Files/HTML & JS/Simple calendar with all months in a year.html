@@ -1,0 +1,165 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holiday Calendar - CPJ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .calendar {
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping for responsiveness */
+            justify-content: center; /* Center the months */
+            gap: 20px; /* Space between months */
+            max-width: 1200px; /* Set a max width for larger screens */
+            margin: 0 auto; /* Center the calendar */
+        }
+
+        .month {
+            flex: 1 1 300px; /* Flex grow, shrink, and set base width */
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: white;
+            min-width: 250px; /* Ensure minimum width for smaller screens */
+        }
+
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+        }
+
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            padding: 10px;
+            gap: 5px; /* Add some space between day cells */
+        }
+
+        .day {
+            padding: 15px;
+            border: 1px solid #ddd;
+            min-width: 30px; /* Minimum width to maintain layout */
+            box-sizing: border-box; /* Ensures padding and border are included in width */
+            cursor: pointer;
+        }
+
+        .day-name {
+            font-weight: bold;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .day {
+                padding: 10px; /* Reduce padding on smaller screens */
+            }
+
+            .header {
+                font-size: 1.2em; /* Adjust header font size */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calendar" id="calendar"></div>
+
+    <script>
+        const calendarContainer = document.getElementById('calendar');
+
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+        function generateMonthCalendar(month, year) {
+            const monthDiv = document.createElement('div');
+            monthDiv.className = 'month';
+
+            const header = document.createElement('div');
+            header.className = 'header';
+            header.textContent = `${monthNames[month]} ${year}`;
+            monthDiv.appendChild(header);
+
+            const daysContainer = document.createElement('div');
+            daysContainer.className = 'days';
+            monthDiv.appendChild(daysContainer);
+
+            // Calculate the first day of the month
+            const firstDay = new Date(year, month, 1).getDay();
+            // Get the number of days in the month
+            const numDays = new Date(year, month + 1, 0).getDate();
+
+            // Create day names
+            dayNames.forEach(day => {
+                const dayNameDiv = document.createElement('div');
+                dayNameDiv.className = 'day day-name';
+                dayNameDiv.textContent = day;
+                daysContainer.appendChild(dayNameDiv);
+            });
+
+            let saturdayCount = 0;
+
+            // Fill in the days of the month
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDiv = document.createElement('div');
+                daysContainer.appendChild(emptyDiv); // Empty divs for days before the first
+            }
+
+            for (let day = 1; day <= numDays; day++) {
+                const date = new Date(year, month, day);
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'day';
+                dayDiv.textContent = day;
+
+                // Check for today
+                if (date.getDate() === new Date().getDate() && date.getMonth() === new Date().getMonth()) {
+                    dayDiv.style.backgroundColor = '#66ff66';
+                    dayDiv.style.fontWeight = "bolder";
+                    dayDiv.style.color = "black";
+                }
+
+                // Check for Sundays
+                if (date.getDay() === 0) { // Sunday
+                    dayDiv.style.backgroundColor = '#FFDDC1'; // Light red for Sundays
+                }
+
+                // Check for Saturdays
+                if (date.getDay() === 6) { // Saturday
+                    saturdayCount++;
+                    if (saturdayCount === 2 || saturdayCount === 4) { // 2nd and 4th Saturday
+                        dayDiv.style.backgroundColor = '#ADD8E6'; // Light blue for 2nd and 4th Saturday
+                    }
+                }
+
+                // Add click event listener
+                dayDiv.addEventListener('click', () => handleDateClick(date));
+
+                daysContainer.appendChild(dayDiv);
+            }
+
+            return monthDiv;
+        }
+
+        // Function to handle date click
+        function handleDateClick(date) {
+            alert(`You clicked on ${date.toDateString()}`);
+        }
+
+        // Get current year
+        const today = new Date();
+        const currentYear = today.getFullYear();
+
+        // Generate calendar for all months
+        for (let month = 0; month < 12; month++) {
+            const monthCalendar = generateMonthCalendar(month, currentYear);
+            calendarContainer.appendChild(monthCalendar);
+        }
+    </script>
+</body>
+</html>

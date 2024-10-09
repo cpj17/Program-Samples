@@ -1,0 +1,654 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holidays - CPJ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            margin: 20px;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+            .timeline::after {
+                content: '';
+                position: absolute;
+                width: 6px;
+                background-color: #2196F3;
+                top: 0;
+                bottom: 0;
+                left: 50%;
+                margin-left: -3px;
+            }
+
+        .event {
+            padding: 10px;
+            background: #e0f7fa;
+            background: #3accdf;
+            border-radius: 6px;
+            position: relative;
+            width: 45%;
+            left: 50%;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+            .event.left {
+                left: -1%;
+            }
+
+            .event.right {
+                left: 52.5%;
+            }
+
+            .event::after {
+            }
+
+            .event.right::after {
+                left: -15px;
+                border-left-color: transparent;
+                border-right-color: #e0f7fa;
+            }
+
+        .date {
+            font-weight: bold;
+        }
+
+        .event:hover {
+            transform: scale(1.05);
+            filter: brightness(80%);
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .today {
+            background-color: #ffeb3b; /* Bright yellow background */
+            color: #000; /* Black text color */
+            font-weight: bold;
+            border: 2px solid #fbc02d; /* Darker border */
+            left: 51.8%;
+        }
+
+        .next-holiday {
+            background-color: #ffe0b2; /* Light orange background */
+            font-weight: bold;
+        }
+
+        .upcoming {
+            background: #7bddea;
+        }
+    </style>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 12px;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        @media screen and (max-width: 600px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+                thead tr {
+                    position: absolute;
+                    top: -9999px;
+                    left: -9999px;
+                }
+
+            tr {
+                margin-bottom: 15px;
+            }
+
+            td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+
+                td::before {
+                    content: attr(data-label);
+                    position: absolute;
+                    left: 0;
+                    width: 50%;
+                    padding-left: 10px;
+                    text-align: left;
+                    font-weight: bold;
+                }
+        }
+    </style>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Two equal columns */
+            gap: 20px;
+        }
+
+        .item {
+            padding: 20px;
+            background-color: #f4f4f4;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Media query for smaller screens */
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr; /* One column on small screens */
+            }
+            #tbl-continuousLeave {
+                margin-top: -1000px;
+                background-color: red;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Holidays - CPJ</h1>
+    <div class="container">
+        <div class="item">
+            <div class="timeline" id="holidayTimeline"></div>
+            <br />
+        </div>
+        <div class="item">
+            <table id="tbl">
+                <tbody>
+                    <tr>
+                        <th> S.no </th>
+                        <th> From </th>
+                        <th> To </th>
+                        <th> Total </th>
+                        <th> Dates </th>
+                    </tr>
+                </tbody>
+                <tbody id="tbody-continuousLeave">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // List of holidays
+        const holidays = [
+            { date: '2024-01-01', name: 'New Year\'s Day' },
+            { date: '2024-01-15', name: 'Uttarayana Punyakala, Makara Sankranti Festival' },
+            { date: '2024-01-26', name: 'Republic Day' },
+            { date: '2024-03-08', name: 'Maha Shivaratri' },
+            { date: '2024-03-29', name: 'Good Friday' },
+            { date: '2024-04-09', name: 'Ugadi Festival' },
+            { date: '2024-04-11', name: 'Khutub-E-Ramzan' },
+            { date: '2024-05-01', name: 'May Day' },
+            { date: '2024-05-10', name: 'Basava Jayanthi/Akshaya Tritiya' },
+            { date: '2024-06-17', name: 'Bakrid' },
+            { date: '2024-07-17', name: 'Last Day of Moharam' },
+            { date: '2024-08-15', name: 'Independence Day' },
+            { date: '2024-09-07', name: 'Varasiddhi Vinayaka Vrata' },
+            { date: '2024-09-16', name: 'Eid-Milad' },
+            { date: '2024-10-02', name: 'Gandhi Jayanthi, Mahalaya Amavasye' },
+            { date: '2024-10-11', name: 'Mahanavami, Ayudhapooja' },
+            { date: '2024-10-12', name: 'Vijayadasami' },
+            { date: '2024-10-17', name: 'Maharshi Valmiki Jayanthi' },
+            { date: '2024-10-31', name: 'Naraka Chaturdashi' },
+            { date: '2024-11-01', name: 'Kannada Rajyothsava' },
+            { date: '2024-11-02', name: 'Balipadyami, Deepavali' },
+            { date: '2024-11-18', name: 'Kanakadasa Jayanthi' },
+            { date: '2024-12-25', name: 'Christmas' },
+        ];
+
+        // Get today's date
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0]; // Format YYYY-MM-DD
+
+        // Add today's date to holidays list
+        // Check if today's date is already in the holidays list
+        const isTodayInHolidays = holidays.some(holiday => holiday.date === todayString);
+
+        if (!isTodayInHolidays) {
+            // Add today's date to holidays list
+            holidays.push({ date: todayString, name: 'Today' });
+        }
+
+        // Function to get the day of the week from a date
+        function getDayOfWeek(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString('en-US', { weekday: 'long' });
+        }
+
+        // Function to create timeline events
+        function createTimeline() {
+            const timeline = document.getElementById('holidayTimeline');
+
+            //1st loop to check if friday holiday is before to the 2nd or 4th saturday
+            holidays.forEach(holiday => {
+                const givenDate = new Date(holiday.date);
+
+                // Check if it's Friday
+                if (givenDate.getDay() === 5) {
+                    const nextDate = new Date(givenDate);
+                    nextDate.setDate(givenDate.getDate() + 1); // Move to the next day
+
+                    // Check if the next day is Saturday
+                    if (nextDate.getDay() === 6) {
+                        const nextDayDate = nextDate.getDate();
+                        const month = nextDate.getMonth(); // Get the month (0-11)
+                        const year = nextDate.getFullYear(); // Get the year
+
+                        // Get all Saturdays of the month
+                        const saturdays = [];
+                        for (let day = 1; day <= 31; day++) {
+                            const testDate = new Date(year, month, day);
+                            if (testDate.getMonth() === month && testDate.getDay() === 6) {
+                                saturdays.push(day);
+                            }
+                        }
+
+                        // Check if nextDate is the 2nd or 4th Saturday
+                        const secondSaturday = saturdays[1]; // 2nd Saturday
+                        const fourthSaturday = saturdays[3]; // 4th Saturday
+
+                        if (nextDayDate === secondSaturday || nextDayDate === fourthSaturday) {
+                            const today = new Date(nextDate);
+                            const todayString = today.toISOString().split('T')[0]; // Format YYYY-MM-DD
+
+                            // Add today's date to holidays list
+                            // Check if today's date is already in the holidays list
+                            const isTodayInHolidays = holidays.some(holiday => holiday.date === todayString);
+
+                            if (!isTodayInHolidays) {
+                                // Add today's date to holidays list
+                                holidays.push({ date: nextDate.toISOString().split('T')[0], name: nextDayDate === secondSaturday ? '2nd Saturday' : '4th Saturday' });
+                            }
+                            // Add the next day as a holiday
+                            /*holidays.push({ date: nextDate.toISOString().split('T')[0], name: 'Special Holiday' });*/
+                        }
+                    }
+                }
+            });
+            //2nd loop check if leave lies on 2nd 0r 4th saturday
+            holidays.forEach(holiday => {
+                if (isSecondOrFourthSaturday(holiday.date) == '2') {
+                    holiday.name = holiday.name != "2nd Saturday" ? holiday.name + "<b>. 2<sup>nd</sup> Saturday</b>" : holiday.name;
+                }
+                if (isSecondOrFourthSaturday(holiday.date) == '4') {
+                    holiday.name = holiday.name != "4th Saturday" ? holiday.name + "<b>. 4<sup>th</sup> Saturday</b>" : holiday.name;
+                }
+            })
+
+            // Sort holidays by date
+            holidays.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            let nextHolidayFound = false;
+            let daysRemainingForNextHoliday = daysUntilNextHoliday(holidays);
+            let todayDiv; // Store reference to "Today" div
+
+            holidays.forEach(holiday => {
+                const div = document.createElement('div');
+                let isRight = false;
+
+                // Get the day of the week
+                const dayOfWeek = getDayOfWeek(holiday.date);
+
+                if (holiday.date === todayString) {
+                    div.className = 'event today';
+                    div.setAttribute('tabindex', '0'); // Allow focus
+                    holiday.name = holiday.name != "Today" ? holiday.name + " (Today)" : holiday.name
+                    isRight = true; // Position today’s holiday on the right
+                    todayDiv = div; // Save reference to "Today" div
+                } else if (new Date(holiday.date) > today) {
+                    if (!nextHolidayFound) {
+                        holiday.name += ' - Next holiday ' + daysRemainingForNextHoliday; // Modify the name to include " - Next holiday"
+                        nextHolidayFound = true; // Mark that we've found the next holiday
+                        div.className = 'event next-holiday';
+                    } else {
+                        div.className = 'event upcoming';
+                    }
+                    isRight = true; // Position upcoming holidays on the right
+                } else {
+                    div.className = 'event completed'; // Class for completed holidays
+                    isRight = false; // Position completed holidays on the left
+                }
+
+                // Set left or right positioning
+                div.classList.add(isRight ? 'right' : 'left');
+                div.innerHTML = `<div class="date">${formateDate(holiday.date)} (${dayOfWeek})</div><div>${holiday.name}</div>`;
+
+                timeline.appendChild(div);
+            });
+
+            // Focus and scroll the "Today" div into view after a brief delay
+            if (todayDiv) {
+                setTimeout(() => {
+                    todayDiv.focus();
+                    // todayDiv.scrollIntoView(); // Scroll into view
+                    // todayDiv.scrollIntoView({ behavior: 'smooth', block: 'center' }); // Scroll into view
+                    todayDiv.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Scroll into view sample values start, center, end and nearest
+                }, 100); // Adjust timeout as necessary
+            }
+        }
+
+        // Call the function to create the timeline
+        createTimeline();
+
+        let intIndex = holidays.findIndex(item => item.name === 'Today')
+        if (intIndex !== -1)
+            holidays.splice(intIndex, 1)
+
+        function daysUntilNextHoliday(holidays) {
+            const today = new Date();
+            let nextHoliday = null;
+
+            // Find the next holiday
+            for (const holiday of holidays) {
+                const holidayDate = new Date(holiday.date);
+                if (holidayDate >= today) {
+                    nextHoliday = holiday;
+                    break;
+                }
+            }
+
+            if (nextHoliday) {
+                const holidayDate = new Date(nextHoliday.date);
+                const timeDifference = holidayDate - today; // Difference in milliseconds
+                const daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); // Convert to days
+                return `(${daysRemaining}d Remaining)`;
+            } else {
+                return 'No more holidays this year!';
+            }
+        }
+
+        function formateDate(objDate, stringDateFormat = "ddmmyyyy", stringSeparator = "-") {
+            try {
+                const inputDate = new Date(objDate)
+
+                var intDate = inputDate.getDate()
+                var intMonth = inputDate.getMonth() + 1
+                var intYear = inputDate.getFullYear()
+
+                stringFormatedDate = ""
+                if (stringDateFormat == "ddmmyyyy") {
+                    stringFormatedDate += padTo2Digits(intDate) + stringSeparator
+                    stringFormatedDate += padTo2Digits(intMonth) + stringSeparator
+                    stringFormatedDate += intYear
+                }
+                if (stringDateFormat == "yyyymmdd") {
+                    stringFormatedDate += intYear + stringSeparator
+                    stringFormatedDate += padTo2Digits(intMonth) + stringSeparator
+                    stringFormatedDate += padTo2Digits(intDate)
+                }
+
+                return stringFormatedDate
+            } catch (objError) {
+                alert(objError)
+            }
+        }
+        function padTo2Digits(num, intPadCount = 2) {
+            try {
+                return num.toString().padStart(intPadCount, '0');
+            } catch (objError) {
+                handleCatchError(objError)
+            }
+        }
+
+        // Function to add Sundays to the holidays array
+        function addSundays(startDate, endDate) {
+            const holidays = [];
+            let date = new Date(startDate);
+            date.toLocaleString('en-US', { weekday: 'long' });
+
+            //Find current date is sunday or not
+            let flag = true
+            if (date.getDay() === 0) { // If it's not Sunday (0)
+                flag = false
+            }
+            while (flag) {
+                date.setDate(date.getDate() + 1); // Move to next SundayAdd one day
+                if (date.getDay() === 0) { // If it's not Sunday (0)
+                    flag = false
+                }
+            }
+
+            while (date <= endDate) {
+                let formattedDate = date.getFullYear() + "-" + padTo2Digits(date.getMonth() + 1) + "-" + padTo2Digits(date.getDate())
+
+                holidays.push({ date: formattedDate, name: 'Sunday' });
+                date.setDate(date.getDate() + 7); // Move to the next Sunday
+            }
+
+            date = new Date(startDate);
+            flag = true
+            if (date.getDay() === 6) { // If it's not Saturday (0)
+                flag = false
+            }
+            while (flag) {
+                date.setDate(date.getDate() + 1);
+                if (date.getDay() === 6) {
+                    flag = false
+                }
+            }
+
+            while (date <= endDate) {
+                let formattedDate = date.getFullYear() + "-" + padTo2Digits(date.getMonth() + 1) + "-" + padTo2Digits(date.getDate())
+                if (isSecondOrFourthSaturday(date) === '2') {
+                    holidays.push({ date: formattedDate, name: '2nd Saturday' });
+                }
+                if (isSecondOrFourthSaturday(date) === '4') {
+                    holidays.push({ date: formattedDate, name: '4th Saturday' });
+                }
+                date.setDate(date.getDate() + 7); // Move to the next Sunday
+            }
+            return holidays
+        }
+        function mergeHolidays(existingHolidays, newHolidays) {
+            const uniqueHolidays = new Map();
+
+            // Add existing holidays to the Map
+            existingHolidays.forEach(holiday => {
+                uniqueHolidays.set(holiday.date, holiday);
+            });
+
+            // Add new holidays to the Map
+            newHolidays.forEach(holiday => {
+                uniqueHolidays.set(holiday.date, holiday);
+            });
+
+            // Convert the Map back to an array
+            return Array.from(uniqueHolidays.values());
+        }
+
+        function isSecondOrFourthSaturday(date) {
+            const givenDate = new Date(date);
+
+            // Check if it's Saturday
+            if (givenDate.getDay() !== 6) {
+                return '0';
+            }
+
+            const month = givenDate.getMonth();
+            const year = givenDate.getFullYear();
+            let saturdaysCount = 0;
+
+            // Loop through the month to count Saturdays
+            for (let day = 1; day <= 31; day++) {
+                const tempDate = new Date(year, month, day);
+
+                // Stop if we go into the next month
+                if (tempDate.getMonth() !== month) break;
+
+                if (tempDate.getDay() === 6) {
+                    saturdaysCount++;
+                    // Check if it's the 2nd or 4th Saturday
+                    if (day === givenDate.getDate()) {
+                        if (saturdaysCount === 2) {
+                            return '2';
+                        } else if (saturdaysCount === 4) {
+                            return '4';
+                        }
+                    }
+                }
+            }
+
+            return '0';
+        }
+
+        // Create a new Date object for the current date
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth(); // 0-11
+
+        currentDate.setDate(currentDate.getDate() - 4); // Subtract 4 days
+        const startDate = new Date(currentDate); // Create a new Date object for the modified date
+
+        // Start from today
+        //const startDate = new Date(currentYear, currentMonth, currentDate.getDate());
+        
+        // End date is the last day of the year
+        const endDate = new Date(currentYear, 11, 31); // December 31st
+
+        saturdaysAndSundays = addSundays(startDate, endDate)
+
+        const mergedHolidays = mergeHolidays(holidays, saturdaysAndSundays);
+        mergedHolidays.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        function findContinuousHolidays(holidays) {
+            const holidayDates = holidays.map(holiday => new Date(holiday.date).getTime());
+            const results = [];
+
+            let count = 1; // Start counting holidays
+            let startIndex = 0;
+
+            for (let i = 1; i < holidayDates.length; i++) {
+                // Check if the current holiday is the next day of the previous one
+                if (holidayDates[i] - holidayDates[i - 1] === 24 * 60 * 60 * 1000) {
+                    count++;
+                } else {
+                    if (count >= 3) {
+                        results.push({
+                            startDate: holidays[startIndex].date,
+                            endDate: holidays[i - 1].date,
+                            numOfDays: count,
+                        });
+                    }
+                    // Reset for the next potential sequence
+                    count = 1;
+                    startIndex = i;
+                }
+            }
+
+            // Check at the end of the loop for any remaining holidays
+            if (count >= 3) {
+                results.push({
+                    startDate: holidays[startIndex].date,
+                    endDate: holidays[holidays.length - 1].date,
+                    numOfDays: count,
+                });
+            }
+
+            return results;
+        }
+
+        const continuousLeaves = findContinuousHolidays(mergedHolidays)
+        var out = ``
+        for (var i = 0; i < continuousLeaves.length; i++) {
+            out += `
+                                    <tr>
+                                        <td> ${i + 1} </td>
+                                        <td> ${formateDate(continuousLeaves[i].startDate)} </td>
+                                        <td> ${formateDate(continuousLeaves[i].endDate)} </td>
+                                        <td> ${continuousLeaves[i].numOfDays} </td>
+                                        <td> ${getInBetweenDates(continuousLeaves[i].startDate, continuousLeaves[i].endDate)} </td>
+                                    </tr>
+                                `
+        }
+        document.getElementById("tbody-continuousLeave").innerHTML = out
+
+        function getInBetweenDates(startDate, endDate) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const dates = [];
+
+            // Loop through the dates from start to end
+            for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
+                var dateString = formateDate(date.toISOString().split('T')[0]) + "(" + getDayOfWeek(date) + ")"
+                dates.push(dateString); // Format as YYYY-MM-DD
+            }
+
+            return dates.join(', ');
+        }
+    </script>
+
+    <script>
+        // Run on initial load
+        document.addEventListener('DOMContentLoaded', updateMargin);
+
+        // Run on window resize
+        window.addEventListener('resize', updateMargin);
+
+        function updateMargin() {
+            const myDiv = document.querySelector('.event.today');
+
+            if (myDiv) {
+                // Accessing the inline style directly
+                const marginTop = myDiv.style.marginTop;
+
+                // Convert it to a number (in pixels)
+                const marginTopValue = parseFloat(marginTop);
+
+                // Get the offset top from the document
+                const offsetTop = myDiv.getBoundingClientRect().top + window.scrollY - 80;
+
+                //document.getElementById("tbl-continuousLeave").style.marginTop = offsetTop + "px"
+
+                // Check if the viewport width is less than or equal to 1200px
+                if (window.matchMedia("(max-width: 1200px)").matches) {
+                    document.getElementById("tbl").style.marginTop = 0 + "px";
+                }
+                else {
+                    document.getElementById("tbl").style.marginTop = offsetTop + "px";
+                }
+            } else {
+                console.error('Element with ID "myDiv" not found.');
+            }
+        }
+    </script>
+
+</body>
+</html>

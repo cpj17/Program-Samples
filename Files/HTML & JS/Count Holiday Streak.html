@@ -1,0 +1,179 @@
+<script>
+    const holidays = [
+        { date: '2024-09-07', name: 'Varasiddhi Vinayaka Vrata' },
+        { date: '2024-09-16', name: 'Eid-Milad' },
+        { date: '2024-10-02', name: 'Gandhi Jayanthi, Mahalaya Amavasye' },
+        { date: '2024-10-11', name: 'Mahanavami, Ayudhapooja' },
+        { date: '2024-10-12', name: 'Vijayadasami' },
+        { date: '2024-10-13', name: 'Sunday' },
+        { date: '2024-10-17', name: 'Maharshi Valmiki Jayanthi' },
+        { date: '2024-10-31', name: 'Naraka Chaturdashi' },
+        { date: '2024-11-01', name: 'Kannada Rajyothsava' },
+        { date: '2024-11-02', name: 'Balipadyami, Deepavali' },
+        { date: '2024-11-18', name: 'Kanakadasa Jayanthi' },
+        { date: '2024-12-25', name: 'Christmas' },
+    ];
+
+    // Function to add Sundays to the holidays array
+    function addSundays(startDate, endDate) {
+        const holidays = [];
+        let date = new Date(startDate);
+        date.toLocaleString('en-US', { weekday: 'long' });
+
+        //Find current date is sunday or not
+        let flag = true
+        if (date.getDay() === 0) { // If it's not Sunday (0)
+            flag = false
+        }
+        while (flag) {
+            date.setDate(date.getDate() + 1); // Move to next SundayAdd one day
+            if (date.getDay() === 0) { // If it's not Sunday (0)
+                flag = false
+            }
+        }
+        
+        while (date <= endDate) {
+            let formattedDate = date.getFullYear() + "-" + padTo2Digits(date.getMonth() + 1) + "-" + padTo2Digits(date.getDate())
+            
+            holidays.push({ date: formattedDate, name: 'Sunday' });
+            date.setDate(date.getDate() + 7); // Move to the next Sunday
+        }
+
+        date = new Date(startDate);
+        flag = true
+        if (date.getDay() === 6) { // If it's not Saturday (0)
+            flag = false
+        }
+        while (flag) {
+            date.setDate(date.getDate() + 1);
+            if (date.getDay() === 6) {
+                flag = false
+            }
+        }
+
+        while (date <= endDate) {
+            let formattedDate = date.getFullYear() + "-" + padTo2Digits(date.getMonth() + 1) + "-" + padTo2Digits(date.getDate())
+            if (isSecondOrFourthSaturday(date) === '2') {
+                holidays.push({ date: formattedDate, name: '2nd Saturday' });
+            }
+            if (isSecondOrFourthSaturday(date) === '4') {
+                holidays.push({ date: formattedDate, name: '4th Saturday' });
+            }
+            date.setDate(date.getDate() + 7); // Move to the next Sunday
+        }
+        return holidays
+    }
+    function isSecondOrFourthSaturday(date) {
+        const givenDate = new Date(date);
+
+        // Check if it's Saturday
+        if (givenDate.getDay() !== 6) {
+            return '0';
+        }
+
+        const month = givenDate.getMonth();
+        const year = givenDate.getFullYear();
+        let saturdaysCount = 0;
+
+        // Loop through the month to count Saturdays
+        for (let day = 1; day <= 31; day++) {
+            const tempDate = new Date(year, month, day);
+
+            // Stop if we go into the next month
+            if (tempDate.getMonth() !== month) break;
+
+            if (tempDate.getDay() === 6) {
+                saturdaysCount++;
+                // Check if it's the 2nd or 4th Saturday
+                if (day === givenDate.getDate()) {
+                    if (saturdaysCount === 2) {
+                        return '2';
+                    } else if (saturdaysCount === 4) {
+                        return '4';
+                    }
+                }
+            }
+        }
+
+        return '0';
+    }
+    function padTo2Digits(num, intPadCount = 2) {
+        try {
+            return num.toString().padStart(intPadCount, '0');
+        } catch (objError) {
+            handleCatchError(objError)
+        }
+    }
+    function mergeHolidays(existingHolidays, newHolidays) {
+        const uniqueHolidays = new Map();
+
+        // Add existing holidays to the Map
+        existingHolidays.forEach(holiday => {
+            uniqueHolidays.set(holiday.date, holiday);
+        });
+
+        // Add new holidays to the Map
+        newHolidays.forEach(holiday => {
+            uniqueHolidays.set(holiday.date, holiday);
+        });
+
+        // Convert the Map back to an array
+        return Array.from(uniqueHolidays.values());
+    }
+
+    // Create a new Date object for the current date
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth(); // 0-11
+
+    // Start from today
+    const startDate = new Date(currentYear, currentMonth, currentDate.getDate());
+
+    // End date is the last day of the year
+    const endDate = new Date(currentYear, 11, 31); // December 31st
+
+    saturdaysAndSundays = addSundays(startDate, endDate)
+
+    const mergedHolidays = mergeHolidays(holidays, saturdaysAndSundays);
+    mergedHolidays.sort((a, b) => new Date(a.date) - new Date(b.date));
+    console.log(mergedHolidays);
+
+    function findContinuousHolidays(holidays) {
+        const holidayDates = holidays.map(holiday => new Date(holiday.date).getTime());
+        const results = [];
+
+        let count = 1; // Start counting holidays
+        let startIndex = 0;
+
+        for (let i = 1; i < holidayDates.length; i++) {
+            // Check if the current holiday is the next day of the previous one
+            if (holidayDates[i] - holidayDates[i - 1] === 24 * 60 * 60 * 1000) {
+                count++;
+            } else {
+                if (count >= 3) {
+                    results.push({
+                        startDate: holidays[startIndex].date,
+                        endDate: holidays[i - 1].date,
+                        numOfDays: count,
+                    });
+                }
+                // Reset for the next potential sequence
+                count = 1;
+                startIndex = i;
+            }
+        }
+
+        // Check at the end of the loop for any remaining holidays
+        if (count >= 3) {
+            results.push({
+                startDate: holidays[startIndex].date,
+                endDate: holidays[holidays.length - 1].date,
+                numOfDays: count,
+            });
+        }
+
+        return results;
+    }
+
+    console.log(findContinuousHolidays(mergedHolidays));
+</script>

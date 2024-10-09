@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circle Segment Divider</title>
+    <style>
+        #canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Divide Circle into Equal Segments</h1>
+    <label for="segments">Number of Segments:</label>
+    <input type="number" id="segments" value="2" min="1">
+    <button onclick="drawCircle()">Draw Circle</button>
+    <br><br>
+    <canvas id="canvas" width="500" height="500"></canvas>
+
+    <script>
+        function drawCircle() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const segmentsInput = document.getElementById('segments');
+            const numSegments = parseInt(segmentsInput.value, 10);
+            const radius = Math.min(canvas.width, canvas.height) / 2 - 10;
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            // Clear previous drawing
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw circle
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx.stroke();
+
+            // Draw segments
+            const angleStep = 2 * Math.PI / numSegments;
+            for (let i = 0; i < numSegments; i++) {
+                const startAngle = i * angleStep;
+                const endAngle = (i + 1) * angleStep;
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                ctx.closePath();
+                ctx.stroke();
+            }
+        }
+
+        // Initial drawing
+        drawCircle();
+    </script>
+</body>
+</html>
