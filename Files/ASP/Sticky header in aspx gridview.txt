@@ -1,0 +1,39 @@
+<style>
+    .header-style {
+        position: sticky;
+        top: 0;
+        z-index: 10; /* Ensure it appears above other elements */
+    }
+
+    .sticky-header {
+        position: relative;
+        overflow: auto;
+        max-height: 400px; /* Adjust this as necessary */
+    }
+</style>
+
+
+<asp:GridView ID="Gv" runat="server" AutoGenerateColumns="true" BackColor="White" BorderColor="#CC9966" BorderStyle="None" BorderWidth="1px" CellPadding="4" Width="100%" EmptyDataText="No records found" EmptyDataRowStyle-Font-Bold="true" EmptyDataRowStyle-HorizontalAlign="Center" CssClass="header-style">
+    <FooterStyle BackColor="#FFFFCC" ForeColor="#330099" />
+    <HeaderStyle CssClass="sticky-header" BackColor="#990000" Font-Bold="True" ForeColor="#FFFFCC" />
+    <PagerStyle BackColor="#FFFFCC" ForeColor="#330099" HorizontalAlign="Center" />
+    <RowStyle BackColor="White" ForeColor="#330099" />
+    <SortedAscendingCellStyle BackColor="#FEFCEB" />
+    <SortedAscendingHeaderStyle BackColor="#AF0101" />
+    <SortedDescendingCellStyle BackColor="#F6F0C0" />
+    <SortedDescendingHeaderStyle BackColor="#7E0000" />
+
+    <Columns>
+        <asp:TemplateField HeaderText="S.No">
+            <ItemTemplate>
+                <asp:Label ID="LblSerialNumber" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
+            </ItemTemplate>
+            <ItemStyle Width="50px" />
+        </asp:TemplateField>
+    </Columns>
+</asp:GridView>
+
+
+
+-- header-style not required in grid css also not required
+-- if doubt refer fnf sln

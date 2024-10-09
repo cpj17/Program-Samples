@@ -1,0 +1,16 @@
+<configuration>
+  <system.web>
+    <httpRuntime maxRequestLength="5120" />
+  </system.web>
+</configuration>
+
+
+<configuration>
+  <system.webServer>
+    <security>
+      <requestFiltering>
+        <requestLimits maxAllowedContentLength="5242880" /> <!-- 5 MB in bytes -->
+      </requestFiltering>
+    </security>
+  </system.webServer>
+</configuration>
