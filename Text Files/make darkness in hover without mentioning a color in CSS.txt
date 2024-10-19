@@ -1,0 +1,3 @@
+.div1:hover, .div2:hover, .div3:hover {
+    filter: brightness(80%); /* Darkens the color by reducing brightness */
+}
