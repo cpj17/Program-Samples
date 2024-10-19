@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.3.3/cerulean/bootstrap.min.css"/>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/6.0.0/bootbox.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <button id="promptButton" onclick="showBootboxDialog()" class="btn btn-primary">Show Prompt</button>
+    </div>
+
+    <script>
+        function showBootboxDialog(stringAlertMessage = "sdsd", stringTitle = "dsfdf", stringSize = "large") {
+		try {
+			boolBootBoxDialogFlag = false
+
+				bootbox.dialog({
+					message: stringAlertMessage,
+					title: "<label style='color: black; font-size: 20px; font-weight: bold;'> " + stringTitle + "</label>",
+					size: stringSize,
+					className: "bootbox-alert-class",
+					buttons: {
+						ok: {
+							label: "Close",
+							className: "btnCancelModal"
+						}
+					},
+					onHidden: function () {
+						alert("alert closed")
+					}
+				});
+		} catch (objError) {
+			alert(objError)
+		}
+	}
+    </script>
+</body>
+</html>
