@@ -1,0 +1,7 @@
+If we use microsoft friendlyurls to remove .aspx extension while instailling one readme is there read that file to know how to use
+
+If we want want to revert back unistall that package in nuget pkg manager and delete temporary files in below path
+file:///C:/Windows/Microsoft.NET/Framework/[version]/Temporary%20ASP.NET%20Files/
+file:///C:/Windows/Microsoft.NET/Framework64/[version]/Temporary%20ASP.NET%20Files/
+
+If it is still not working clear cache data in browser, it will work
