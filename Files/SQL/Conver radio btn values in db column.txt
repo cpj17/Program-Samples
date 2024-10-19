@@ -1,0 +1,13 @@
+2.CREATE TABLE [dbo].[UserInfo] (
+    [Email]     VARCHAR (50) NOT NULL,
+    [FirstName] VARCHAR (50) NOT NULL,
+    [LastName]  VARCHAR (50) NOT NULL,
+    [Gender]    VARCHAR (10) NOT NULL,
+    [Password]  VARCHAR (50) NOT NULL,
+    [dob]       DATE         NOT NULL,
+    [Street]    VARCHAR (50) NOT NULL,
+    [City]      VARCHAR (50) NOT NULL,
+    [State]     VARCHAR (50) NOT NULL,
+    PRIMARY KEY CLUSTERED ([Email] ASC),
+    CONSTRAINT [CK_Gender] CHECK ([Gender]='Female' OR [Gender]='Male')
+);

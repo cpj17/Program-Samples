@@ -1,0 +1,29 @@
+-- Sample id LV202428860
+
+Select case when Max(Substring(Applid,7,5)) is null then 1 else Max(Substring(Applid,7, 5))+1 end as maxApplid from tblLeaveRequest where Substring(Applid,3,4) =  2024
+
+maxApplid
+28861
+
+Select case when Max(Substring(Applid,7,5)) is null then 1 else Max(Substring(Applid,7, 5))+1 end as maxApplid from tblLeaveRequest where Substring(Applid,3,4) =  2025
+
+maxApplid
+1
+
+-- Actual query starts use below query
+
+SELECT 
+    RIGHT('0000000' + 
+    CAST(
+        CASE 
+            WHEN MAX(SUBSTRING(Applid, 7, 5)) IS NULL THEN 1 
+            ELSE MAX(SUBSTRING(Applid, 7, 5)) + 1 
+        END AS VARCHAR(5)), 
+    7) AS maxApplid
+FROM 
+    tblLeaveRequest 
+WHERE 
+    SUBSTRING(Applid, 3, 4) = '2025';
+
+maxApplid
+0000001
