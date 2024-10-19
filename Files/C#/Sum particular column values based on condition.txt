@@ -1,0 +1,1 @@
+object objMark = objDataTable.Compute("SUM(Mark)", "QuestionnaireId = '" + objDataRow["QuestionnaireId"].ToString() + "'");
