@@ -1,0 +1,10 @@
+<configuration>
+  <system.webServer>
+    <security>
+      <requestFiltering>
+        <requestLimits maxAllowedContentLength="5242880" />
+        <!-- 5 MB in bytes -->
+      </requestFiltering>
+    </security>
+  </system.webServer>
+</configuration>
