@@ -1,0 +1,29 @@
+You can easily hide a folder using the Command Prompt (CMD) in Windows 11 with the `attrib` command.
+
+### 🛠️ Here's how to do it:
+
+1. **Open Command Prompt**:
+   - Press `Win + S`, type `cmd`, and choose **Command Prompt**.
+   - Right-click and select **Run as administrator** (optional, but can avoid permission issues).
+
+2. **Use the `attrib` command**:
+   ```bash
+   attrib +h +s "C:\path\to\your\folder"
+   ```
+
+   🔹 `+h`: sets the folder as **hidden**  
+   🔹 `+s`: marks it as a **system** folder, which makes it harder to show even with "Show hidden files" enabled
+
+   ✅ Example:
+   ```bash
+   attrib +h +s "C:\Users\YourName\Documents\SecretFolder"
+   ```
+
+---
+
+### 📂 To unhide the folder later:
+```bash
+attrib -h -s "C:\path\to\your\folder"
+```
+
+---
