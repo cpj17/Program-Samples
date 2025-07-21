@@ -1,0 +1,35 @@
+CREATE TABLE Test_Employees (
+    EmpId INT PRIMARY KEY,
+    Name VARCHAR(100),
+    EffDt DATE
+);
+
+-- Inserting data into Employees table
+INSERT INTO Test_Employees (EmpId, Name, EffDt)
+VALUES (1, 'John Doe', '2025-01-01'),
+       (2, 'Jane Smith', '2025-02-15'),
+       (3, 'Alice Johnson', '2025-03-20');
+	   
+	   
+CREATE TABLE Test_EmployeeContacts (
+    EmpId INT,
+    ContactNum VARCHAR(15),
+    FOREIGN KEY (EmpId) REFERENCES Test_Employees(EmpId)
+);
+
+-- Inserting data into EmployeeContacts table
+INSERT INTO Test_EmployeeContacts (EmpId, ContactNum)
+VALUES (1, '123-456-7890'),
+       (2, '234-567-8901'),
+       (3, '345-678-9012');
+	     
+
+CREATE TRIGGER InsertEmployeeContact
+ON Test_Employees
+AFTER INSERT
+AS
+BEGIN
+    INSERT INTO Test_EmployeeContacts (EmpId, ContactNum)
+    SELECT EmpId, NULL
+    FROM INSERTED;
+END;

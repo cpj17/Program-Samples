@@ -1,0 +1,6 @@
+DECLARE @LocCodes VARCHAR(MAX) = 'B0129,B0142';
+SELECT STRING_AGG(EmpNo, '.')
+FROM vwBranchInfo 
+WHERE Location_Code IN (SELECT value FROM STRING_SPLIT(@LocCodes, ','));
+
+sp_TrgRefresher @flag = 15, @LocCodes = 'B0129, B001'

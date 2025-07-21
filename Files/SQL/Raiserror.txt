@@ -1,0 +1,1 @@
+RAISERROR('error message.', 16, 1);

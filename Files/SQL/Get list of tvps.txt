@@ -1,0 +1,4 @@
+SELECT name AS TableTypeName
+FROM sys.table_types
+WHERE is_user_defined = 1
+ORDER BY name;

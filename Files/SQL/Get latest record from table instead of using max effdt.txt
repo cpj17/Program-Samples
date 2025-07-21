@@ -1,0 +1,19 @@
+WITH LatestRecords AS (
+    SELECT 
+        EmpId,
+        EffDt,
+        MID,
+        MarriageDate,
+        ROW_NUMBER() OVER (PARTITION BY EmpId ORDER BY EffDt DESC) AS RowNum
+    FROM 
+        Emp_T_MaritalStatus
+)
+SELECT 
+    EmpId,
+    EffDt,
+    MID,
+    MarriageDate
+FROM 
+    LatestRecords
+WHERE 
+    RowNum = 1;

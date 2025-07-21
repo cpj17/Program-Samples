@@ -1,0 +1,36 @@
+DECLARE @TableTypeName NVARCHAR(128) = 'udd_dmldata'; -- Replace with your table type name
+DECLARE @SQL NVARCHAR(MAX) = '';
+
+-- Start the CREATE TYPE statement
+SET @SQL = 'CREATE TYPE ' + @TableTypeName + ' AS TABLE (';
+
+-- Add column definitions
+SELECT @SQL = @SQL + CHAR(13) + CHAR(10) + 
+        '    ' + c.name + ' ' + t.name + 
+        CASE 
+            WHEN t.name IN ('varchar', 'char', 'nvarchar', 'nchar') THEN 
+                '(' + 
+                    CASE 
+                        WHEN c.max_length = -1 THEN 'MAX'
+                        ELSE CAST(c.max_length AS VARCHAR(5))
+                    END		
+                + ')'
+            WHEN t.name IN ('decimal', 'numeric') THEN 
+                '(' + CAST(c.precision AS VARCHAR(5)) + ',' + CAST(c.scale AS VARCHAR(5)) + ')'
+            ELSE ''
+        END +
+        CASE 
+            WHEN c.is_nullable = 1 THEN ' NULL'
+            ELSE ' NOT NULL'
+        END + ',' 
+FROM sys.table_types AS tt
+INNER JOIN sys.columns AS c ON tt.type_table_object_id = c.object_id
+INNER JOIN sys.types AS t ON c.user_type_id = t.user_type_id
+WHERE tt.name = @TableTypeName
+ORDER BY c.column_id;
+
+-- Remove the trailing comma and add closing parenthesis
+SET @SQL = LEFT(@SQL, LEN(@SQL) - 1) + ');';
+
+-- Output the generated CREATE TYPE statement
+PRINT @SQL;

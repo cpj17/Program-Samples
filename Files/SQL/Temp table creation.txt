@@ -1,0 +1,11 @@
+IF OBJECT_ID('tempdb..#tableName') IS NOT NULL
+	BEGIN
+		DROP TABLE #tableName;
+	END
+	 
+    ---- Temporary table creation
+    CREATE TABLE #tableName (
+		columnName1 NVARCHAR(50),
+		columnName2 NVARCHAR(50),
+		columnName3 NVARCHAR(50)
+		);  

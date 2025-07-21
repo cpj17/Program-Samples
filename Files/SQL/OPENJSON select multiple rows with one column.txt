@@ -1,0 +1,7 @@
+SELECT CAST(p.[Value] AS INT) FROM OPENJSON('[1,2,3]') p
+
+Output
+(No column name)
+1
+2
+3

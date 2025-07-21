@@ -1,0 +1,13 @@
+CREATE TABLE Employees (
+    EmployeeID uniqueidentifier DEFAULT NEWID() PRIMARY KEY,
+    FirstName NVARCHAR(50),
+    LastName NVARCHAR(50),
+    HireDate DATETIME
+);
+
+
+INSERT INTO Employees (FirstName, LastName, HireDate)
+VALUES ('John', 'Doe', '2024-01-01'),
+       ('Jane', 'Smith', '2024-02-01');
+
+SELECT * FROM Employees

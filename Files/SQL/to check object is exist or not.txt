@@ -1,0 +1,25 @@
+Here are some examples of the types of objects you can search for using OBJECT_ID:
+
+'C': Cursor
+'P': Stored Procedure
+'FN': Scalar Function
+'IF': Inline Function
+'TF': Table-Valued Function
+'V': View
+'U': User Table
+'PK': Primary Key
+'UQ': Unique Constraint
+'F': Foreign Key
+'X': Extended Stored Procedure (deprecated)
+'IT': Internal Table
+'ITC': Internal Table Constraint
+
+sample query for curso
+
+IF OBJECT_ID('curEmp', 'C') IS NOT NULL
+	DEALLOCATE curEmp
+
+DECLARE
+	curEmp
+CURSOR FOR
+	SELECT EmpId, EmpName FROM aptn_emp

@@ -1,0 +1,20 @@
+SELECT 
+    t.name AS TableTypeName,
+    c.name AS ColumnName,
+    c.column_id,
+    tp.name AS DataType,
+    c.max_length,
+    c.precision,
+    c.scale,
+    c.is_nullable
+FROM 
+    sys.table_types AS t
+INNER JOIN 
+    sys.columns AS c ON t.type_table_object_id = c.object_id
+INNER JOIN 
+    sys.types AS tp ON c.user_type_id = tp.user_type_id
+WHERE 
+    t.is_user_defined = 1
+    AND t.name = '<YourTableTypeName>'  -- Replace with the table type name you want to check
+ORDER BY 
+    t.name, c.column_id;
