@@ -1,0 +1,2 @@
+List<string> selectedBranches = cblContacts.Items.Cast<ListItem>().Where(li => li.Selected).Select(li => li.Value).ToList();
+string selectedBranchesString = string.Join(",", selectedBranches.Select(branch => "'" + branch + "'"));

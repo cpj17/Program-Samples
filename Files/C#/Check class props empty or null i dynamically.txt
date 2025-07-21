@@ -1,0 +1,27 @@
+        private bool HasMissingFields(clsDataChangeInputs input)
+        {
+            return string.IsNullOrWhiteSpace(input.EmpId)
+                || string.IsNullOrWhiteSpace(input.EffDt)
+                || string.IsNullOrWhiteSpace(input.JobRoleCode)
+                || string.IsNullOrWhiteSpace(input.DeptId)
+                || string.IsNullOrWhiteSpace(input.DesgCode)
+                || string.IsNullOrWhiteSpace(input.LocCode)
+                || string.IsNullOrWhiteSpace(input.CreatedBy);
+        }
+
+        private bool HasMissingFields(clsDataChangeInputs input)
+        {
+            var stringProps = typeof(clsDataChangeInputs).GetProperties()
+                .Where(p => p.PropertyType == typeof(string));
+
+            foreach (var prop in stringProps)
+            {
+                var value = prop.GetValue(input) as string;
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }

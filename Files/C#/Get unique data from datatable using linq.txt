@@ -1,0 +1,15 @@
+//here id is unique but data may be duplicate for that case we get last get record of duplicate
+
+var distinctQuestions = objDataSet.Tables[1].AsEnumerable()
+    .GroupBy(row => new
+    {
+        Question = row["Question"],
+        Opt1 = row["Opt1"],
+        Opt2 = row["Opt2"],
+        Opt3 = row["Opt3"],
+        Opt4 = row["Opt4"],
+        CorrectAnswer = row["CorrectAnswer"]
+    })
+    .Select(group => group.Last())
+    .ToList();
+DataTable objDataTable = distinctQuestions.CopyToDataTable();

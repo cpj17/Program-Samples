@@ -1,0 +1,24 @@
+using System.Configuration;
+
+namespace EmpCreation
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string setting1 = ConfigurationManager.AppSettings["Setting1"];
+        }
+    }
+}
+
+
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <startup> 
+        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.7.2" />
+    </startup>\
+	<appSettings>
+		<add key="Setting1" value="Value1" />
+		<add key="Setting2" value="Value2" />
+	</appSettings>
+</configuration>
