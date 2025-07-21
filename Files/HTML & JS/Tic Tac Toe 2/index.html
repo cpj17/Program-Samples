@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #gameBoard {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 5px;
+            justify-content: center;
+            margin: 20px auto;
+            width: 330px;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        #createRoom, #joinRoom {
+            margin-top: 10px;
+        }
+        #score {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Tic Tac Toe</h1>
+
+<div>
+    <input type="text" id="roomName" placeholder="Enter Room Name" />
+    <button id="createRoom">Create Room</button>
+    <button id="joinRoom">Join Room</button>
+</div>
+
+<div id="score"></div>
+
+<div id="gameBoard" style="display: none;">
+    <div class="cell" onclick="makeMove(0)"></div>
+    <div class="cell" onclick="makeMove(1)"></div>
+    <div class="cell" onclick="makeMove(2)"></div>
+    <div class="cell" onclick="makeMove(3)"></div>
+    <div class="cell" onclick="makeMove(4)"></div>
+    <div class="cell" onclick="makeMove(5)"></div>
+    <div class="cell" onclick="makeMove(6)"></div>
+    <div class="cell" onclick="makeMove(7)"></div>
+    <div class="cell" onclick="makeMove(8)"></div>
+</div>
+
+<p id="message"></p>
+
+<script>
+    const ws = new WebSocket('ws://localhost:8080');
+    let currentRoom = null;
+    let currentPlayer = null;
+
+    // Listen for messages from the server
+    ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.message) {
+            document.getElementById('message').innerText = data.message;
+        }
+        if (data.board) {
+            renderBoard(data.board);
+        }
+        if (data.currentPlayer) {
+            currentPlayer = data.currentPlayer;
+        }
+        if (data.message && data.message.includes('reset')) {
+            document.getElementById('resetButton').style.display = 'none';
+        }
+        if (data.message && data.message.includes('Scores:')) {
+            document.getElementById('score').innerText = data.message;
+        }
+    };
+
+    // Create room
+    document.getElementById('createRoom').onclick = () => {
+        const roomName = document.getElementById('roomName').value;
+        if (roomName) {
+            ws.send(JSON.stringify({ type: 'createRoom', roomName: roomName }));
+            currentRoom = roomName;
+        }
+    };
+
+    // Join room
+    document.getElementById('joinRoom').onclick = () => {
+        const roomName = document.getElementById('roomName').value;
+        if (roomName) {
+            ws.send(JSON.stringify({ type: 'joinRoom', roomName: roomName }));
+            currentRoom = roomName;
+        }
+    };
+
+    // Render the board
+    function renderBoard(board) {
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach((cell, index) => {
+            cell.textContent = board[index] ? board[index] : '';
+        });
+        document.getElementById('gameBoard').style.display = 'grid';
+    }
+
+    // Make a move
+    function makeMove(index) {
+        if (!currentRoom || !currentPlayer) return;
+        ws.send(JSON.stringify({ type: 'move', roomName: currentRoom, index: index }));
+    }
+
+</script>
+
+</body>
+</html>

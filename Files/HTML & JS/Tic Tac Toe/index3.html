@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe - WebSocket</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .board { display: grid; grid-template-columns: repeat(3, 100px); grid-gap: 5px; margin-top: 20px; }
+        .cell { width: 100px; height: 100px; text-align: center; font-size: 24px; border: 1px solid #000; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .cell.disabled { pointer-events: none; }
+        .message { margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Tic Tac Toe Game</h1>
+<div id="message" class="message"></div>
+
+<div id="board" class="board"></div>
+
+<script>
+    const ws = new WebSocket('ws://localhost:8080');
+    const board = document.getElementById('board');
+    const messageElem = document.getElementById('message');
+    let gameData = {};
+
+    // Create empty cells
+    for (let i = 0; i < 9; i++) {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.dataset.index = i;
+        cell.addEventListener('click', () => makeMove(i));
+        board.appendChild(cell);
+    }
+
+    ws.onopen = () => {
+        console.log('Connected to the server');
+    };
+
+    ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        gameData = data;
+        updateBoard();
+        displayMessage(data.message);
+
+        // If the message contains the winner's information, show an alert
+        if (data.message.includes('is winning!')) {
+            alert(data.message);
+        }
+    };
+
+    function updateBoard() {
+        gameData.board.forEach((cell, index) => {
+            const cellElem = board.children[index];
+            cellElem.textContent = cell;
+            if (cell !== null) {
+                cellElem.classList.add('disabled');
+            } else {
+                cellElem.classList.remove('disabled');
+            }
+        });
+    }
+
+    function displayMessage(message) {
+        messageElem.textContent = message;
+    }
+
+    function makeMove(index) {
+        if (gameData.board[index] === null) {
+            ws.send(JSON.stringify({ index }));
+        }
+    }
+</script>
+
+</body>
+</html>
