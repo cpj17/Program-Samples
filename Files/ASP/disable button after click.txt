@@ -1,0 +1,2 @@
+string var = ClientScript.GetPostBackEventReference(BtnLoadNoOfStaff, "").ToString();
+BtnLoadNoOfStaff.Attributes.Add("onClick", "javascript :if(Page_ClientValidate()){this.disabled=true; this.value='Please Wait...';" + var + "};");

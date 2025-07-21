@@ -1,0 +1,109 @@
+<%-- Use below code inside UpdatePanel and outside ContentTemplate
+<Triggers>
+	<asp:PostBackTrigger ControlID="BtnBulkUpload" />
+</Triggers>
+--%>
+
+
+
+
+<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage/eQuizz.Master" AutoEventWireup="true" CodeBehind="QuestionBank.aspx.cs" Inherits="eQuizz.eQuizz.QuestionBank" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+</asp:Content>
+
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+
+    <%-- Styles Used --%>
+    <style>
+        
+    </style>
+
+    <asp:UpdatePanel runat="server" ID="UpdPanel">
+        <ContentTemplate>
+            
+            <div class="row">
+
+                <%--For Claim Report Details--%>
+                <div class="col-10" style="width: 100%;">
+
+                    <%--for handling all controls--%>
+                    <asp:Panel runat="server" Width="100%">
+
+                        <%--main div with background color--%>
+                        <div class="shadow" style="background-color: floralwhite;">
+                            <div class="mainContainer">
+                                
+                                <div>
+                                    <label class="stepContentLabel"> Question Bank </label>
+                                </div>
+
+                            </div>
+                        </div>
+                    </asp:Panel>
+                    <%--Modal Popup Related Code Outside Update Panel because it has file upload (begins)--%>
+                    <div id="div-BulkQuesUpload" style="display: none;">
+                        <asp:Panel runat="server" ID="PnlBulkQuestions" CssClass="div-PopupPanel" Visible="true">
+                        <%--Optional--%>
+                            <header>
+                                <div class="hamburger" >
+                                    Bulk Upload
+                                </div>
+                                <div class="hamburger" onclick="triggerButton('<%= BtnBulkUpdCancel.ClientID %>')">
+                                    &times;
+                                </div>
+                            </header>
+                            <br />
+                            <%--Optional--%>
+
+                            <p>
+                                <label class="stepContentLabel"> Note: </label> <br />
+                                  1. If question type is empty it will consider as a descriptive question. And Active status is empty it will consider as Y <br />
+                                  2. If question type is MCQ then atleast option 1, option 2 and correct answer is needed. <br />
+                                  3. If question type is Survey then atleast option 1 and option 2 is needed. <br />
+                            </p>
+
+                            <table style="float: right;">
+                                <tr>
+                                    <td> <asp:FileUpload runat="server" ID="FileUpdQuestionBulk" BorderStyle="Double" accept=".xlsx" /> </td>
+                                    <td> <asp:Button ID="BtnBulkUpload" OnClick="BtnBulkUpload_Click" Text="Upload" runat="server" BackColor="Green" /> </td>
+                                    <td> <asp:HyperLink runat="server" NavigateUrl="~/eQuizz/Files/Question Bulk Upload Template.xlsx" BackColor="Blue" CssClass="button" Style="text-decoration: none; padding: 6px; height: fit-content;"> Download Template </asp:HyperLink> </td>
+                                </tr>
+                            </table>
+
+                            <div class="modal-popup-content-container">
+                                <br />
+                                <asp:GridView ID="GvUploadedQuestions" runat="server" AutoGenerateColumns="true" BackColor="White" BorderColor="#CC9966" BorderStyle="None" BorderWidth="1px" CellPadding="4" Width="100%" EmptyDataText="No records found" EmptyDataRowStyle-Font-Bold="true" EmptyDataRowStyle-HorizontalAlign="Center">
+                                    <FooterStyle BackColor="#FFFFCC" ForeColor="#330099" />
+                                    <HeaderStyle CssClass="sticky-header" BackColor="#990000" Font-Bold="True" ForeColor="#FFFFCC" />
+                                    <PagerStyle BackColor="#FFFFCC" ForeColor="#330099" HorizontalAlign="Center" />
+                                    <RowStyle BackColor="White" ForeColor="#330099" />
+                                    <SortedAscendingCellStyle BackColor="#FEFCEB" />
+                                    <SortedAscendingHeaderStyle BackColor="#AF0101" />
+                                    <SortedDescendingCellStyle BackColor="#F6F0C0" />
+                                    <SortedDescendingHeaderStyle BackColor="#7E0000" />
+
+                                </asp:GridView>
+                            </div>
+                            <br />
+                            <div style="text-align: center;">
+                                <asp:Button Text="Save" runat="server" ID="BtnSaveBulkUpload" OnClick="BtnSaveBulkUpload_Click" Visible="false" BackColor="Green" />
+                                <asp:Button Text="Cancel" ID="BtnBulkUpdCancel" OnClick="BtnBulkUpdCancel_Click" runat="server" BackColor="Red" />
+                            </div>
+                        </asp:Panel>
+                    </div>
+                    <%--Modal Popup Related Code Outside Update Panel because it has file upload (ends)--%>
+
+                </div>
+            </div>
+        </ContentTemplate>
+        <Triggers>
+            <asp:PostBackTrigger ControlID="BtnBulkUpload" />
+        </Triggers>
+    </asp:UpdatePanel>
+
+    <script>
+        
+    </script>
+
+</asp:Content>

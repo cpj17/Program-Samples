@@ -1,0 +1,57 @@
+protected void Page_Load(object sender, EventArgs e)
+{
+    if (!IsPostBack)
+    {
+        // Example: Create a sample DataTable
+        DataTable dt = new DataTable();
+        dt.Columns.Add("ID");
+        dt.Columns.Add("Name");
+        dt.Rows.Add("1", "Alice");
+        dt.Rows.Add("2", "Bob");
+
+        // Store it in ViewState or Session if needed
+        Session["MyData"] = dt;
+    }
+}
+
+protected void btnExport_Click(object sender, EventArgs e)
+{
+    DataTable dt = Session["MyData"] as DataTable;
+
+    if (dt != null)
+    {
+        ExportToExcel(dt, "MyDataExport.xls");
+    }
+}
+
+private void ExportToExcel(DataTable dt, string filename)
+{
+    Response.Clear();
+    Response.Buffer = true;
+    Response.ContentType = "application/vnd.ms-excel";
+    Response.AddHeader("content-disposition", "attachment;filename=" + filename);
+    Response.Charset = "";
+    EnableViewState = false;
+
+    using (System.IO.StringWriter sw = new System.IO.StringWriter())
+    {
+        using (HtmlTextWriter hw = new HtmlTextWriter(sw))
+        {
+            GridView gv = new GridView();
+            gv.DataSource = dt;
+            gv.DataBind();
+
+            gv.RenderControl(hw);
+
+            Response.Output.Write(sw.ToString());
+            Response.Flush();
+            Response.End();
+        }
+    }
+}
+
+// Needed for rendering GridView to HTML
+public override void VerifyRenderingInServerForm(Control control)
+{
+    // Required to avoid runtime error
+}

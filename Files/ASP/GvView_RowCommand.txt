@@ -1,0 +1,21 @@
+OnRowCommand="GvView_RowCommand"
+
+<asp:TemplateField>
+                    <ItemTemplate>
+                        <asp:Button ID="btnShowDetails" runat="server" Text="Show Details"  
+                         CommandName="ShowDetails" CommandArgument='<%# Eval("PremisesCode") %>' />
+                    </ItemTemplate>
+                   </asp:TemplateField>
+
+        protected void GvView_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+           
+                if (e.CommandName == "ShowDetails")
+                {
+                    // Get the row index
+                    int rowIndex = Convert.ToInt32(e.CommandArgument);
+
+                    // Get data from the clicked row
+                    GridViewRow row = GvView.Rows[rowIndex];
+                    string name = row.Cells[1].Text; // Assuming Name is in the 2nd column
+                    string age = row.Cells[2].Text;  // Assuming Age is in the 3rd column

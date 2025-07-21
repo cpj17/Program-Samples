@@ -1,0 +1,44 @@
+/* GridView Pager Styling BY CPJ (begins)*/
+.grid-pagination a,
+.grid-pagination span {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 2px;
+    text-decoration: none;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.grid-pagination a:hover {
+    background-color: #007BFF;
+    color: white;
+    border-color: #007BFF;
+}
+
+.grid-pagination span {
+    background-color: #007BFF;
+    color: white;
+    border-color: #007BFF;
+    cursor: default;
+}
+
+.grid-pagination .pager-nav {
+    font-weight: bold;
+    color: #007BFF;
+    border: 1px solid #007BFF;
+    border-radius: 4px;
+    padding: 8px 12px;
+}
+
+.grid-pagination .pager-nav:hover {
+    background-color: #007BFF;
+    color: white;
+}
+/* GridView Pager Styling BY CPJ (ends)*/
+
+
+
+<PagerStyle BackColor="#FFFFCC" ForeColor="#330099" HorizontalAlign="Center" Font-Bold="true" BorderColor="SeaGreen" CssClass="grid-pagination" />
+<PagerSettings Mode="NumericFirstLast" Position="Bottom" PreviousPageText="Prev" NextPageText="Next" />

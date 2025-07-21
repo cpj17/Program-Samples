@@ -1,0 +1,7 @@
+<style>
+    .asp-label-overflow {
+        overflow-wrap: anywhere;
+    }
+</style>
+
+<asp:BoundField HeaderText="Remarks" DataField="EmpRemarks" ItemStyle-CssClass="asp-label-overflow" />

@@ -1,0 +1,61 @@
+<asp:FileUpload runat="server" ID="FileUpdQuestionBulk" BorderStyle="Double" accept=".xlsx" />
+<asp:Button runat="server" ID="btnUpload" Text="Upload" OnClick="btnUpload_Click" />
+
+
+protected void btnUpload_Click(object sender, EventArgs e)
+{
+    // Check if a file is uploaded
+    if (FileUpdQuestionBulk.HasFile)
+    {
+        // Get the uploaded file as a stream
+        using (var stream = FileUpdQuestionBulk.PostedFile.InputStream)
+        {
+            // Now, call the ConvertExcelToDataTable function using the stream
+            DataTable dt = ConvertExcelToDataTable(stream);
+
+            // Optionally, process the DataTable (e.g., bind it to a GridView, etc.)
+            // GridView1.DataSource = dt;
+            // GridView1.DataBind();
+        }
+    }
+    else
+    {
+        // Handle case where no file was uploaded (e.g., show an error message)
+        lblError.Text = "Please upload a valid Excel file.";
+    }
+}
+
+private DataTable ConvertExcelToDataTable(Stream stream)
+{
+    DataTable dt = new DataTable();
+
+    // Use the stream directly in the XLWorkbook constructor
+    using (var workbook = new XLWorkbook(stream))
+    {
+        var worksheet = workbook.Worksheets.First(); // Get the first worksheet
+
+        // Read the header row to create columns
+        var headerRow = worksheet.FirstRowUsed();
+        foreach (var cell in headerRow.Cells())
+        {
+            dt.Columns.Add(cell.Value.ToString());
+        }
+
+        // Process the rest of the rows
+        foreach (var row in worksheet.RowsUsed().Skip(1)) // Skip the header row
+        {
+            DataRow dataRow = dt.NewRow();
+            foreach (var cell in row.Cells())
+            {
+                var columnName = headerRow.Cell(cell.Address.ColumnNumber).Value.ToString();
+                if (dt.Columns.Contains(columnName))
+                {
+                    dataRow[columnName] = cell.Value;
+                }
+            }
+            dt.Rows.Add(dataRow);
+        }
+    }
+
+    return dt;
+}
