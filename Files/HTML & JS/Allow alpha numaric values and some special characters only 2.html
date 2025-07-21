@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Restriction</title>
+</head>
+<body>
+
+    <label for="inputField">Enter text:</label>
+    <input type="text" id="inputField" onkeypress="restrictTyping(event)" placeholder="Type here...">
+
+    <script>
+        function restrictTyping(event) {
+            // Allowed characters: alphanumeric and the special ones
+            const allowedChars = /^[a-zA-Z0-9!@#$%^&*()_\-+=\[\]{}\\|?/>.<,~`]/;
+
+            // Get the character code of the pressed key
+            const char = String.fromCharCode(event.which || event.keyCode);
+
+            // If the character is not allowed, prevent the default action (i.e., typing)
+            if (!allowedChars.test(char)) {
+                event.preventDefault();
+            }
+        }
+    </script>
+
+</body>
+</html>

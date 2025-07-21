@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Details</title>
+    <style>
+        .div-body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .div-val-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        .form-group, .form-group-dual {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .form-group-dual {
+            flex-wrap: wrap;
+        }
+
+        .form-group-dual .form-sub-group {
+            display: flex;
+            justify-content: space-between;
+            width: 48%;
+        }
+
+        .form-group label, .form-group-dual .form-sub-group label {
+            font-weight: bold;
+            width: 30%;
+            color: #333;
+        }
+
+        .form-group input, .form-group-dual .form-sub-group input {
+            width: 65%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .form-group input[readonly], .form-group-dual .form-sub-group input[readonly] {
+            background-color: #f0f0f0;
+            cursor: not-allowed;
+        }
+
+        .form-group:nth-child(odd), .form-group-dual:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        @media (max-width: 600px) {
+            .form-group, .form-group-dual {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .form-group-dual .form-sub-group {
+                width: 100%;
+            }
+
+            .form-group label, .form-group-dual .form-sub-group label {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+
+            .form-group input, .form-group-dual .form-sub-group input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="div-body">
+    <div class="div-val-container">
+        <h1>Vendor Information</h1>
+        <div class="form-group-dual">
+            <div class="form-sub-group">
+                <label>Vendor ID:</label>
+                <input type="text" value="001" readonly />
+            </div>
+            <div class="form-sub-group">
+                <label>Name:</label>
+                <input type="text" value="ABC" readonly />
+            </div>
+        </div>
+        <div class="form-group-dual">
+            <div class="form-sub-group">
+                <label>Address:</label>
+                <input type="text" value="India" readonly />
+            </div>
+            <div class="form-sub-group">
+                <label>Mobile:</label>
+                <input type="text" value="9876543210" readonly />
+            </div>
+        </div>
+        <div class="form-group-dual">
+            <div class="form-sub-group">
+                <label>Contact:</label>
+                <input type="text" value="6547893210" readonly />
+            </div>
+            <div class="form-sub-group">
+                <label>Pan No:</label>
+                <input type="text" value="ASDI0448K" readonly />
+            </div>
+        </div>
+        <div class="form-group-dual">
+            <div class="form-sub-group">
+                <label>GST No:</label>
+                <input type="text" value="15648977987985134" readonly />
+            </div>
+            <div class="form-sub-group">
+                <label>Fax No:</label>
+                <input type="text" value="8585676756745" readonly />
+            </div>
+        </div>
+        <div class="form-group-dual">
+            <div class="form-sub-group">
+                <label>Email:</label>
+                <input type="email" value="test@gmail.com" readonly />
+            </div>
+            <div class="form-sub-group">
+                <label>Website:</label>
+                <input type="text" value="www.abc.in" readonly />
+            </div>
+        </div>
+        <div class="form-group-dual">
+            <div class="form-sub-group">
+                <label>Contact Name:</label>
+                <input type="text" value="David" readonly />
+            </div>
+            <div class="form-sub-group">
+                <label>Contact Designation:</label>
+                <input type="text" value="CSO" readonly />
+            </div>
+        </div>
+        <div class="form-group-dual">
+            <div class="form-sub-group">
+                <label>Nature of Company:</label>
+                <input type="text" value="Business" readonly />
+            </div>
+            <div class="form-sub-group">
+                <label>Nature of Business:</label>
+                <input type="text" value="Loan" readonly />
+            </div>
+        </div>
+        <div class="form-group-dual">
+            <div class="form-sub-group">
+                <label>Registered MSME:</label>
+                <input type="text" value="Y" readonly />
+            </div>
+            <div class="form-sub-group">
+                <label>Bank Name:</label>
+                <input type="text" value="SBI" readonly />
+            </div>
+        </div>
+        <div class="form-group-dual">
+            <div class="form-sub-group">
+                <label>Branch Name:</label>
+                <input type="text" value="Noida" readonly />
+            </div>
+            <div class="form-sub-group">
+                <label>Bank Account No:</label>
+                <input type="text" value="r564651653653651" readonly />
+            </div>
+        </div>
+        <div class="form-group">
+            <label>IFSC Code:</label>
+            <input type="text" value="SBI7097998689" readonly />
+        </div>
+        <button class="button">Submit</button>
+    </div>
+</div>
+</body>
+</html>

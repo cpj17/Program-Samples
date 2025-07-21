@@ -1,0 +1,269 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holiday Calendar - CPJ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .calendar {
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping for responsiveness */
+            justify-content: center; /* Center the months */
+            gap: 20px; /* Space between months */
+            max-width: 1200px; /* Set a max width for larger screens */
+            margin: 0 auto; /* Center the calendar */
+        }
+
+        .month {
+            flex: 1 1 300px; /* Flex grow, shrink, and set base width */
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: white;
+            min-width: 250px; /* Ensure minimum width for smaller screens */
+        }
+
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+        }
+
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            padding: 10px;
+            gap: 5px; /* Add some space between day cells */
+        }
+
+        .day {
+            padding: 15px;
+            border: 1px solid #ddd;
+            min-width: 30px; /* Minimum width to maintain layout */
+            box-sizing: border-box; /* Ensures padding and border are included in width */
+            cursor: pointer;
+			padding: 10px;
+        }
+
+        .day-name {
+            font-weight: bold;
+        }
+
+        /* Highlight current month */
+        .current-month {
+            border: 2px solid #4CAF50; /* Green border for the current month */
+            background-color: #e8f5e9; /* Light green background */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .day {
+                padding: 10px; /* Reduce padding on smaller screens */
+            }
+
+            .header {
+                font-size: 1.2em; /* Adjust header font size */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calendar" id="calendar"></div>
+
+    <script>
+		const holidays = [
+            { date: '2024-01-01', name: 'New Year\'s Day' },
+            { date: '2024-01-15', name: 'Uttarayana Punyakala, Makara Sankranti Festival' },
+            { date: '2024-01-26', name: 'Republic Day' },
+            { date: '2024-03-08', name: 'Maha Shivaratri' },
+            { date: '2024-03-29', name: 'Good Friday' },
+            { date: '2024-04-09', name: 'Ugadi Festival' },
+            { date: '2024-04-11', name: 'Khutub-E-Ramzan' },
+            { date: '2024-05-01', name: 'May Day' },
+            { date: '2024-05-10', name: 'Basava Jayanthi/Akshaya Tritiya' },
+            { date: '2024-06-17', name: 'Bakrid' },
+            { date: '2024-07-17', name: 'Last Day of Moharam' },
+            { date: '2024-08-15', name: 'Independence Day' },
+            { date: '2024-09-07', name: 'Varasiddhi Vinayaka Vrata' },
+            { date: '2024-09-16', name: 'Eid-Milad' },
+            { date: '2024-10-02', name: 'Gandhi Jayanthi, Mahalaya Amavasye' },
+            { date: '2024-10-11', name: 'Mahanavami, Ayudhapooja' },
+            { date: '2024-10-12', name: 'Vijayadasami' },
+            { date: '2024-10-17', name: 'Maharshi Valmiki Jayanthi' },
+            { date: '2024-10-31', name: 'Naraka Chaturdashi' },
+            { date: '2024-11-01', name: 'Kannada Rajyothsava' },
+            { date: '2024-11-02', name: 'Balipadyami, Deepavali' },
+            { date: '2024-11-18', name: 'Kanakadasa Jayanthi' },
+            { date: '2024-12-25', name: 'Christmas' },
+        ];
+		
+        const calendarContainer = document.getElementById('calendar');
+
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+        function generateMonthCalendar(month, year, isCurrentMonth) {
+            const monthDiv = document.createElement('div');
+            monthDiv.className = 'month';
+
+            if (isCurrentMonth) {
+                monthDiv.classList.add('current-month'); // Add class for current month
+            }
+
+            const header = document.createElement('div');
+            header.className = 'header';
+            header.textContent = `${monthNames[month]} ${year}`;
+            monthDiv.appendChild(header);
+
+            const daysContainer = document.createElement('div');
+            daysContainer.className = 'days';
+            monthDiv.appendChild(daysContainer);
+
+            // Calculate the first day of the month
+            const firstDay = new Date(year, month, 1).getDay();
+            // Get the number of days in the month
+            const numDays = new Date(year, month + 1, 0).getDate();
+
+            // Create day names
+            dayNames.forEach(day => {
+                const dayNameDiv = document.createElement('div');
+                dayNameDiv.className = 'day day-name';
+                dayNameDiv.textContent = day;
+                daysContainer.appendChild(dayNameDiv);
+            });
+
+            let saturdayCount = 0;
+
+            // Fill in the days of the month
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDiv = document.createElement('div');
+                daysContainer.appendChild(emptyDiv); // Empty divs for days before the first
+            }
+
+            for (let day = 1; day <= numDays; day++) {
+                const date = new Date(year, month, day);
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'day';
+                dayDiv.textContent = day;
+
+                // Check for today
+                if (date.getDate() === new Date().getDate() && date.getMonth() === new Date().getMonth()) {
+                    dayDiv.style.backgroundColor = '#66ff66';
+                    dayDiv.style.fontWeight = "bolder";
+                    dayDiv.style.color = "black";
+                }
+
+                // Check for Sundays
+                if (date.getDay() === 0) { // Sunday
+                    dayDiv.style.backgroundColor = '#FFDDC1'; // Light red for Sundays
+                }
+
+                // Check for Saturdays
+                if (date.getDay() === 6) { // Saturday
+                    saturdayCount++;
+                    if (saturdayCount === 2 || saturdayCount === 4) { // 2nd and 4th Saturday
+                        dayDiv.style.backgroundColor = '#ADD8E6'; // Light blue for 2nd and 4th Saturday
+                    }
+                }
+				
+				// Check for leave
+                let formattedDate = date.getFullYear() + "-" + padTo2Digits(date.getMonth() + 1) + "-" + padTo2Digits(date.getDate())
+                const isTodayInHolidays = holidays.some(holiday => holiday.date === formattedDate);
+                
+                if (isTodayInHolidays) { // Leave
+                    dayDiv.style.backgroundColor = '#ffaa80';
+                }
+
+                // Add click event listener
+                dayDiv.addEventListener('click', () => handleDateClick(date));
+
+                daysContainer.appendChild(dayDiv);
+            }
+
+            return monthDiv;
+        }
+
+        // Function to handle the click event
+        function handleDateClick(date) {
+            const formattedDate = date.getFullYear() + "-" + padTo2Digits(date.getMonth() + 1) + "-" + padTo2Digits(date.getDate());
+            let row = holidays.filter(item => item.date == formattedDate)
+            if (row.length > 0) {
+                let content = formateDate(formattedDate) + " (" + getDayOfWeek(formattedDate) + ")\n" + row[0].name + "\n" + daysFromToday(formattedDate) + "d remaining"
+                alert(content)
+            }
+        }
+
+        function daysFromToday(targetDate) {
+            targetDate = new Date(targetDate)
+            const today = new Date(); // Get today's date
+            const timeDifference = targetDate - today; // Difference in milliseconds
+            const dayCount = Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); // Convert to days
+            return dayCount;
+        }
+
+        function formateDate(objDate, stringDateFormat = "ddmmyyyy", stringSeparator = "-") {
+            try {
+                const inputDate = new Date(objDate)
+
+                var intDate = inputDate.getDate()
+                var intMonth = inputDate.getMonth() + 1
+                var intYear = inputDate.getFullYear()
+
+                stringFormatedDate = ""
+                if (stringDateFormat == "ddmmyyyy") {
+                    stringFormatedDate += padTo2Digits(intDate) + stringSeparator
+                    stringFormatedDate += padTo2Digits(intMonth) + stringSeparator
+                    stringFormatedDate += intYear
+                }
+                if (stringDateFormat == "yyyymmdd") {
+                    stringFormatedDate += intYear + stringSeparator
+                    stringFormatedDate += padTo2Digits(intMonth) + stringSeparator
+                    stringFormatedDate += padTo2Digits(intDate)
+                }
+
+                return stringFormatedDate
+            } catch (objError) {
+                alert(objError)
+            }
+        }
+
+        function padTo2Digits(num, intPadCount = 2) {
+            try {
+                return num.toString().padStart(intPadCount, '0');
+            } catch (objError) {
+                handleCatchError(objError)
+            }
+        }
+		
+		// Function to get the day of the week from a date
+        function getDayOfWeek(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString('en-US', { weekday: 'long' });
+        }
+
+        // Get current year and month
+        const today = new Date();
+        const currentYear = today.getFullYear();
+        const currentMonth = today.getMonth();
+
+        // Generate calendar for all months
+        for (let month = 0; month < 12; month++) {
+            const isCurrentMonth = month === currentMonth;
+            const monthCalendar = generateMonthCalendar(month, currentYear, isCurrentMonth);
+            calendarContainer.appendChild(monthCalendar);
+            // Scroll to the current month
+            if (isCurrentMonth) {
+                monthCalendar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    </script>
+</body>
+</html>

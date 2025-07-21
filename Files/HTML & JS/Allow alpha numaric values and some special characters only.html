@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Validation</title>
+    <style>
+        .invalid {
+            border: 2px solid red;
+        }
+        .valid {
+            border: 2px solid green;
+        }
+    </style>
+</head>
+<body>
+
+    <label for="inputField">Enter text:</label>
+    <input type="text" id="inputField" oninput="validateInputOnInput()" placeholder="Type here...">
+
+    <p id="errorMessage" style="color:red; display:none;">Invalid input. Only alphanumeric characters and specific special characters are allowed.</p>
+
+    <script>
+        function validateInputOnInput() {
+            const inputField = document.getElementById("inputField");
+            const errorMessage = document.getElementById("errorMessage");
+            const regex = /^[a-zA-Z0-9!@#$%^&*()_\-+=\[\]{}\\|?/>.<,~`]*$/;
+            
+            if (regex.test(inputField.value)) {
+                inputField.classList.remove("invalid");
+                inputField.classList.add("valid");
+                errorMessage.style.display = "none";  // Hide error message if input is valid
+            } else {
+                inputField.classList.remove("valid");
+                inputField.classList.add("invalid");
+                errorMessage.style.display = "block";  // Show error message if input is invalid
+            }
+        }
+    </script>
+
+</body>
+</html>
